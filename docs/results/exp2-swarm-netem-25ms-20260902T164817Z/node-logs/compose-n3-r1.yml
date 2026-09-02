@@ -1,0 +1,197 @@
+# GENERATED FILE - do not edit by hand.
+#
+#   python -m discovery.run_swarm --write-compose
+#
+# regenerates it, and tests/test_swarm.py::test_committed_compose_matches_generator
+# fails if this file and discovery/run_swarm.py have drifted apart.
+#
+# 3 Edge Grid nodes, each in its own network namespace with its own
+# address on the 10.77.0.0/24 bridge. Every node binds the same TCP port,
+# which is the point: on shared loopback that is impossible.
+#
+# This example does not carry a bootstrap PeerID, because a PeerID cannot be
+# known without a private key and no key is committed. Create the identities and
+# print the address first:
+#
+#   python -m discovery.run_swarm --write-keys ./deploy/grid/keys --nodes 3
+#   export EG_BOOTSTRAP="$(python -m discovery.run_swarm --print-bootstrap --nodes 3 \
+#                            --key-dir ./deploy/grid/keys)"
+#   docker compose -f deploy/grid/compose.yml up
+#
+# For measurements use discovery/run_swarm.py instead - it sequences the
+# bootstrap ahead of the providers, collects each container's JSON event stream
+# and writes a RunLog. `docker compose up` starts everything at once, and
+# discovery.node does not retry its bootstrap dial.
+name: "edgegrid-swarm-n3"
+services:
+  node0:
+    image: "edgegrid-node:dev"
+    container_name: "edgegrid-swarm-n3-node0"
+    hostname: "node0"
+    init: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      EG_NAME: "node0"
+      EG_ADVERTISE_IP: "10.77.0.10"
+      EG_NETEM_MS: "25.0"
+      OLLAMA_HOST: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "qwen3-vl:2b-instruct"
+    volumes:
+      - "/home/chetan/.edgegrid/run_swarm:/keys:ro"
+    networks:
+      gridnet:
+        ipv4_address: "10.77.0.10"
+    command:
+      - "--name"
+      - "eg3c-0"
+      - "--port"
+      - "4001"
+      - "--key-dir"
+      - "/keys"
+      - "--model"
+      - "qwen3-vl:2b-instruct"
+      - "--listen-ip"
+      - "0.0.0.0"
+      - "--advertise-ip"
+      - "10.77.0.10"
+      - "--bid-window"
+      - "2.0"
+      - "--ttl"
+      - "120.0"
+      - "--wait-peers-timeout"
+      - "60.0"
+      - "--dht-probe"
+      - "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53"
+      - "--dht-probe"
+      - "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1"
+      - "--role"
+      - "requester"
+      - "--wait-peers"
+      - "2"
+      - "--job-after"
+      - "0.5"
+      - "--prompt"
+      - "What is the capital of France? Answer in one word."
+      - "--max-price"
+      - "0.2"
+      - "--max-latency-ms"
+      - "30000"
+    stop_grace_period: "3s"
+    cap_add:
+      - "NET_ADMIN"
+  node1:
+    image: "edgegrid-node:dev"
+    container_name: "edgegrid-swarm-n3-node1"
+    hostname: "node1"
+    init: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      EG_NAME: "node1"
+      EG_ADVERTISE_IP: "10.77.0.11"
+      EG_NETEM_MS: "25.0"
+      OLLAMA_HOST: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "qwen3-vl:2b-instruct"
+    volumes:
+      - "/home/chetan/.edgegrid/run_swarm:/keys:ro"
+    networks:
+      gridnet:
+        ipv4_address: "10.77.0.11"
+    command:
+      - "--name"
+      - "eg3c-1"
+      - "--port"
+      - "4001"
+      - "--key-dir"
+      - "/keys"
+      - "--model"
+      - "qwen3-vl:2b-instruct"
+      - "--listen-ip"
+      - "0.0.0.0"
+      - "--advertise-ip"
+      - "10.77.0.11"
+      - "--bid-window"
+      - "2.0"
+      - "--ttl"
+      - "120.0"
+      - "--wait-peers-timeout"
+      - "60.0"
+      - "--dht-probe"
+      - "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G"
+      - "--dht-probe"
+      - "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1"
+      - "--role"
+      - "provider"
+      - "--bootstrap"
+      - "/ip4/10.77.0.10/tcp/4001/p2p/16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G"
+      - "--price"
+      - "0.07"
+      - "--ttft-ms"
+      - "1300.0"
+      - "--wait-peers"
+      - "1"
+    stop_grace_period: "3s"
+    cap_add:
+      - "NET_ADMIN"
+  node2:
+    image: "edgegrid-node:dev"
+    container_name: "edgegrid-swarm-n3-node2"
+    hostname: "node2"
+    init: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      EG_NAME: "node2"
+      EG_ADVERTISE_IP: "10.77.0.12"
+      EG_NETEM_MS: "25.0"
+      OLLAMA_HOST: "http://host.docker.internal:11434"
+      OLLAMA_MODEL: "qwen3-vl:2b-instruct"
+    volumes:
+      - "/home/chetan/.edgegrid/run_swarm:/keys:ro"
+    networks:
+      gridnet:
+        ipv4_address: "10.77.0.12"
+    command:
+      - "--name"
+      - "eg3c-2"
+      - "--port"
+      - "4001"
+      - "--key-dir"
+      - "/keys"
+      - "--model"
+      - "qwen3-vl:2b-instruct"
+      - "--listen-ip"
+      - "0.0.0.0"
+      - "--advertise-ip"
+      - "10.77.0.12"
+      - "--bid-window"
+      - "2.0"
+      - "--ttl"
+      - "120.0"
+      - "--wait-peers-timeout"
+      - "60.0"
+      - "--dht-probe"
+      - "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G"
+      - "--dht-probe"
+      - "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53"
+      - "--role"
+      - "provider"
+      - "--bootstrap"
+      - "/ip4/10.77.0.10/tcp/4001/p2p/16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G"
+      - "--price"
+      - "0.09"
+      - "--ttft-ms"
+      - "1400.0"
+      - "--wait-peers"
+      - "1"
+    stop_grace_period: "3s"
+    cap_add:
+      - "NET_ADMIN"
+networks:
+  gridnet:
+    name: "edgegrid-swarm-n3-net"
+    driver: "bridge"
+    ipam:
+      config:
+        - subnet: "10.77.0.0/24"

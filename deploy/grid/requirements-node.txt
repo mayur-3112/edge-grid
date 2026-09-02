@@ -1,0 +1,20 @@
+# Runtime dependencies of a containerised Edge Grid node - the subset of the
+# repo's requirements.txt that `discovery.node` actually imports.
+#
+# The node process needs libp2p, an identity, the wire schemas and psutil for
+# the heartbeat's load numbers. It never touches web3, fastapi, pandas or
+# matplotlib, so those stay out of the image: a smaller image builds faster and
+# has less that can drift from the host environment.
+#
+# Every line here must appear verbatim in the repo's requirements.txt.
+# tests/test_swarm.py::test_node_requirements_match_repo_requirements enforces
+# that, so the container can never silently run a different pin than the host.
+
+libp2p==0.7.0
+trio>=0.26.0
+multiaddr>=0.2.0
+eth-keys>=0.5.1
+eth-utils>=4.1.1
+psutil>=5.9.0
+pydantic>=2.9.0
+python-dotenv>=1.0.0

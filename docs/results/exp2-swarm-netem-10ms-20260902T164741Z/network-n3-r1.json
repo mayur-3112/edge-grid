@@ -1,0 +1,12 @@
+{
+  "network": "edgegrid-swarm-n3-net",
+  "network_id": "8ce000a51bf3",
+  "driver": "bridge",
+  "subnet": "10.77.0.0/24",
+  "gateway": "10.77.0.1",
+  "containers": {
+    "edgegrid-swarm-n3-node1": "10.77.0.11/24",
+    "edgegrid-swarm-n3-node2": "10.77.0.12/24",
+    "edgegrid-swarm-n3-node0": "10.77.0.10/24"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "run_id": "exp2-auction-convergence-summary-20260902T110609Z",
+  "experiment": "exp2-auction-convergence-summary",
+  "finished_utc": "2026-09-02T11:06:09.732625+00:00",
+  "elapsed_s": 0.012,
+  "rows": {
+    "summary": 3,
+    "sources": 8
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

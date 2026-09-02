@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="700" viewBox="0 0 1040 700" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+    <marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#a8324f"/>
+    </marker>
+  </defs>
+  <rect width="1040" height="700" fill="#ffffff"/>
+
+  <text x="24" y="34" font-size="17" font-weight="bold" fill="#111">The Edge Grid — System Architecture</text>
+  <text x="24" y="54" font-size="12" fill="#555">Five modules. Solid arrows carry data; dashed arrows carry value or proofs.</text>
+
+  <!-- ============ CLIENT ============ -->
+  <rect x="24" y="78" width="992" height="72" fill="#f4f4f6" stroke="#999" stroke-width="1"/>
+  <text x="38" y="98" font-size="10.5" letter-spacing="1.4" fill="#666">CLIENT LAYER</text>
+  <rect x="42" y="106" width="200" height="34" fill="#fff" stroke="#333"/>
+  <text x="142" y="128" font-size="12.5" text-anchor="middle" fill="#111">Python SDK (OpenAI-compatible)</text>
+  <rect x="256" y="106" width="176" height="34" fill="#fff" stroke="#333"/>
+  <text x="344" y="128" font-size="12.5" text-anchor="middle" fill="#111">FastAPI REST Gateway</text>
+  <rect x="446" y="106" width="160" height="34" fill="#fff" stroke="#333"/>
+  <text x="526" y="128" font-size="12.5" text-anchor="middle" fill="#111">Operator Dashboard</text>
+
+  <!-- ============ MODULE 1 + 2 ============ -->
+  <rect x="24" y="180" width="486" height="176" fill="#fbfbfc" stroke="#999"/>
+  <text x="38" y="200" font-size="10.5" letter-spacing="1.4" fill="#666">MODULE 1 — DECENTRALIZED DISCOVERY</text>
+  <rect x="42" y="212" width="210" height="58" fill="#fff" stroke="#333"/>
+  <text x="147" y="234" font-size="12.5" text-anchor="middle" fill="#111">Kademlia DHT (py-libp2p)</text>
+  <text x="147" y="252" font-size="10.5" text-anchor="middle" fill="#666">NodeRecord: addr, tier, models</text>
+  <rect x="266" y="212" width="226" height="58" fill="#fff" stroke="#333"/>
+  <text x="379" y="234" font-size="12.5" text-anchor="middle" fill="#111">UDP heartbeat (5 s)</text>
+  <text x="379" y="252" font-size="10.5" text-anchor="middle" fill="#666">RAM / CPU / warm models / health</text>
+  <rect x="42" y="284" width="450" height="52" fill="#fff" stroke="#333"/>
+  <text x="267" y="304" font-size="12.5" text-anchor="middle" fill="#111">ECDSA secp256k1 identity</text>
+  <text x="267" y="322" font-size="10.5" text-anchor="middle" fill="#666">one keypair = PeerID + wallet address + message signatures</text>
+
+  <rect x="530" y="180" width="486" height="176" fill="#fbfbfc" stroke="#999"/>
+  <text x="544" y="200" font-size="10.5" letter-spacing="1.4" fill="#666">MODULE 2 — HYBRID MARKET PROTOCOL</text>
+  <rect x="548" y="212" width="450" height="58" fill="#fff" stroke="#333"/>
+  <text x="773" y="234" font-size="12.5" text-anchor="middle" fill="#111">libp2p GossipSub task mempool</text>
+  <text x="773" y="252" font-size="10.5" text-anchor="middle" fill="#666">topics: jobs · bids · awards · commitments</text>
+  <rect x="548" y="284" width="450" height="52" fill="#fff" stroke="#333"/>
+  <text x="773" y="304" font-size="12.5" text-anchor="middle" fill="#111">Sealed-bid second-price auction</text>
+  <text x="773" y="322" font-size="10.5" text-anchor="middle" fill="#666">winner by (TTFT, price) under budget · warm-start bonus</text>
+
+  <!-- ============ MODULE 3 ============ -->
+  <rect x="24" y="386" width="486" height="120" fill="#fbfbfc" stroke="#999"/>
+  <text x="38" y="406" font-size="10.5" letter-spacing="1.4" fill="#666">MODULE 3 — EDGE INFERENCE ENGINE</text>
+  <rect x="42" y="418" width="450" height="72" fill="#fff" stroke="#333"/>
+  <text x="267" y="440" font-size="12.5" text-anchor="middle" fill="#111">Ollama streaming runtime (CPU / Apple Silicon)</text>
+  <text x="267" y="458" font-size="10.5" text-anchor="middle" fill="#666">token-by-token stream over direct libp2p connection</text>
+  <text x="267" y="476" font-size="10.5" text-anchor="middle" fill="#666">measures true TTFT · real eval_count · tier classifier</text>
+
+  <!-- ============ MODULE 4 ============ -->
+  <rect x="530" y="386" width="486" height="120" fill="#fbfbfc" stroke="#999"/>
+  <text x="544" y="406" font-size="10.5" letter-spacing="1.4" fill="#666">MODULE 4 — AGENTIC VERIFICATION</text>
+  <rect x="548" y="418" width="218" height="72" fill="#fff" stroke="#333"/>
+  <text x="657" y="440" font-size="12.5" text-anchor="middle" fill="#111">Data availability layer</text>
+  <text x="657" y="458" font-size="10.5" text-anchor="middle" fill="#666">namespaced blobs,</text>
+  <text x="657" y="474" font-size="10.5" text-anchor="middle" fill="#666">Merkle inclusion proofs</text>
+  <rect x="780" y="418" width="218" height="72" fill="#fff" stroke="#333"/>
+  <text x="889" y="440" font-size="12.5" text-anchor="middle" fill="#111">Validator agent pool</text>
+  <text x="889" y="458" font-size="10.5" text-anchor="middle" fill="#666">5% sample · LLM-as-a-Judge</text>
+  <text x="889" y="474" font-size="10.5" text-anchor="middle" fill="#666">pass / fail / error</text>
+
+  <!-- ============ MODULE 5 ============ -->
+  <rect x="24" y="536" width="992" height="130" fill="#fbfbfc" stroke="#999"/>
+  <text x="38" y="556" font-size="10.5" letter-spacing="1.4" fill="#666">MODULE 5 — BLOCKCHAIN SETTLEMENT (Solidity / EVM)</text>
+  <rect x="42" y="568" width="230" height="80" fill="#fff" stroke="#333"/>
+  <text x="157" y="590" font-size="12.5" text-anchor="middle" fill="#111">NodeRegistry</text>
+  <text x="157" y="608" font-size="10.5" text-anchor="middle" fill="#666">stake as Sybil resistance</text>
+  <text x="157" y="624" font-size="10.5" text-anchor="middle" fill="#666">slashing entry point</text>
+  <rect x="286" y="568" width="230" height="80" fill="#fff" stroke="#333"/>
+  <text x="401" y="590" font-size="12.5" text-anchor="middle" fill="#111">Marketplace</text>
+  <text x="401" y="608" font-size="10.5" text-anchor="middle" fill="#666">escrow state machine</text>
+  <text x="401" y="624" font-size="10.5" text-anchor="middle" fill="#666">open → verify → settle</text>
+  <rect x="530" y="568" width="230" height="80" fill="#fff" stroke="#333"/>
+  <text x="645" y="590" font-size="12.5" text-anchor="middle" fill="#111">VerificationContract</text>
+  <text x="645" y="608" font-size="10.5" text-anchor="middle" fill="#666">commitment + fraud proof</text>
+  <text x="645" y="624" font-size="10.5" text-anchor="middle" fill="#666">80% validator / 20% treasury</text>
+  <rect x="774" y="568" width="224" height="80" fill="#fff" stroke="#333"/>
+  <text x="886" y="590" font-size="12.5" text-anchor="middle" fill="#111">ModelRegistry</text>
+  <text x="886" y="608" font-size="10.5" text-anchor="middle" fill="#666">model id → content hash</text>
+
+  <!-- ============ ARROWS ============ -->
+  <!-- gateway submits the job into the market mempool, not into discovery -->
+  <path d="M344,150 L344,166 L773,166 L773,206" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="560" y="162" font-size="10.5" text-anchor="middle" fill="#444">submit signed job request</text>
+
+  <!-- discovery feeds the eligible peer set to the market -->
+  <path d="M492,313 L520,313 L520,310 L544,310" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="518" y="332" font-size="10.5" text-anchor="middle" fill="#444">eligible peers</text>
+
+  <!-- award -> winning node runs inference -->
+  <path d="M660,342 L660,364 L267,364 L267,412" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="430" y="358" font-size="10.5" text-anchor="middle" fill="#444">award &#8594; direct P2P stream to winning node</text>
+
+  <!-- output -> DA layer -->
+  <path d="M492,454 L544,454" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="518" y="446" font-size="10.5" text-anchor="middle" fill="#444">output</text>
+
+  <!-- DA -> validator -->
+  <path d="M766,454 L776,454" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+
+  <!-- commitment reference on chain -->
+  <path d="M657,494 L657,562" stroke="#1a1a1a" stroke-width="1.4" fill="none" marker-end="url(#a)"/>
+  <text x="649" y="530" font-size="10.5" text-anchor="end" fill="#444">commitment ref</text>
+
+  <!-- fraud proof -> slashing -->
+  <path d="M889,494 L889,562" stroke="#a8324f" stroke-width="1.4" fill="none" stroke-dasharray="5 3" marker-end="url(#ap)"/>
+  <text x="898" y="530" font-size="10.5" fill="#a8324f">fraud proof &#8594; slash</text>
+
+  <!-- settlement returns value to the client layer -->
+  <path d="M157,562 L157,520 L32,520 L32,132 L38,132" stroke="#a8324f" stroke-width="1.4" fill="none" stroke-dasharray="5 3" marker-end="url(#ap)"/>
+  <text x="166" y="540" font-size="10.5" fill="#a8324f">payout / refund</text>
+</svg>

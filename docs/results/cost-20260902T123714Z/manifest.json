@@ -1,0 +1,13 @@
+{
+  "run_id": "cost-20260902T123714Z",
+  "experiment": "cost",
+  "finished_utc": "2026-09-02T12:37:14.950083+00:00",
+  "elapsed_s": 0.024,
+  "rows": {
+    "cost_summary": 2
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

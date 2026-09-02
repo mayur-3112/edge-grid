@@ -1,0 +1,14 @@
+{
+  "run_id": "verification-20260902T121801Z",
+  "experiment": "verification",
+  "finished_utc": "2026-09-02T12:34:05.352127+00:00",
+  "elapsed_s": 964.082,
+  "rows": {
+    "raw": 100,
+    "summary": 5
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

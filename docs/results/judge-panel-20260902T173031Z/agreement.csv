@@ -1,0 +1,7 @@
+judge_a,judge_b,n_compared,n_shared_items,n_excluded_error,raw_agreement,cohens_kappa,kappa_note
+ling-3-flash,minimax-m3,13,99,86,0.9231,0.0,
+ling-3-flash,nemotron-120b,11,99,88,1.0,1.0,
+ling-3-flash,qwen-27b,13,99,86,1.0,1.0,
+minimax-m3,nemotron-120b,16,99,83,0.9375,0.7647,
+minimax-m3,qwen-27b,99,99,0,0.9293,0.7574,
+nemotron-120b,qwen-27b,16,99,83,0.9375,0.7647,

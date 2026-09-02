@@ -1,0 +1,16 @@
+{
+  "dataset_source": "truthfulqa-cache",
+  "generator_backend": "groq",
+  "generator_model": "openai/gpt-oss-120b",
+  "honest_source": "groq",
+  "n_questions_loaded": 20,
+  "n_items": 99,
+  "dropped": [
+    {
+      "what": "q16:honest",
+      "why": "groq returned no answer outside its reasoning block; raise GEN_MAX_TOKENS or choose a non-reasoning model"
+    }
+  ],
+  "items_key": "d35d0c332bac",
+  "items_from_cache": false
+}

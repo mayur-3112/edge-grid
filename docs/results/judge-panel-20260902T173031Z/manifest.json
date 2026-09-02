@@ -1,0 +1,22 @@
+{
+  "run_id": "judge-panel-20260902T173031Z",
+  "experiment": "judge-panel",
+  "finished_utc": "2026-09-02T17:37:54.342377+00:00",
+  "elapsed_s": 442.932,
+  "rows": {
+    "raw": 693,
+    "panel_votes": 396,
+    "summary": 42,
+    "agreement": 6
+  },
+  "dropped": [
+    {
+      "what": "q16:honest",
+      "why": "groq returned no answer outside its reasoning block; raise GEN_MAX_TOKENS or choose a non-reasoning model",
+      "at": 13.984879887997522
+    }
+  ],
+  "n_dropped": 1,
+  "error": null,
+  "status": "ok"
+}

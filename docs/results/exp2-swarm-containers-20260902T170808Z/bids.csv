@@ -1,0 +1,3 @@
+n_nodes,repeat,job_id,rank,bidder,price,effective,warm,ttft_ms
+3,0,de662e25-fb54-4b09-8554-7c8769c0c726,0,16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53,0.07,0.07,False,1300.0
+3,0,de662e25-fb54-4b09-8554-7c8769c0c726,1,16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1,0.09,0.09,False,1400.0

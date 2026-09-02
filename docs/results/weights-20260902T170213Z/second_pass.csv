@@ -1,0 +1,6 @@
+model_id,cid,bytes,hit,fetch_ms,n_evicted
+synth-weights-65536,QmWNRD9YgbxSS9kFE9GPoCXHY7meRB3wstsWxvHCWbt5gT,65536,False,10.54,0
+synth-weights-1048576,QmSrHNhA55vUHSSXEe7suNrjb2nbu4y4FA1RL47AN2EdpE,1048576,False,11.21,1
+synth-weights-4194304,QmbbbeKoEFN9g3amA81An8hwUWEmNafKGsGpQ1eHts3yqL,4194304,False,31.276,0
+synth-weights-16777216,QmQzcjHeeeyFjcSttKmVMzMTowQhC5CgHvdcKknxpzsJ1V,16777216,False,95.137,0
+synth-weights-50331648,QmPm1SWK5L3Z3dpEyE4VeLoefkv7p7zCmCRUj2zrMUQ4mU,50331648,False,270.416,4

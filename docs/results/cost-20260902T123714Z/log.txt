@@ -1,0 +1,3 @@
+[    0.01s] inference from inference-benchmark-20260902T120811Z: 45.6 tok/job, 12.86 tok/s, model qwen3-vl:2b-instruct
+[    0.02s] settlement from settlement-onchain-20260902T120752Z: mean escrow 0.0500 GRID, honest-path gas 421497
+[    0.02s] verification from verification-20260902T121801Z: 1.00 judge calls per audit on ollama/qwen3-vl:2b-instruct

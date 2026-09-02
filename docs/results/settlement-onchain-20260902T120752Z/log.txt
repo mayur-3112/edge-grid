@@ -1,0 +1,2 @@
+[    0.02s] chain 31337 at http://127.0.0.1:8545, block 6
+[    0.48s] evm_increaseTime 3660s to close the challenge window

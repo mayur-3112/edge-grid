@@ -1,0 +1,440 @@
+/* The Edge Grid — operator console.
+ *
+ * Design brief: this is instrumentation for a network of physical machines
+ * trading compute. It is read in a lit room, screenshotted into a report, and
+ * printed. So it is set on paper rather than on a dark console: a warm off-white
+ * ground, a fine graph-paper grid, hairline rules, and an ink-blue accent used
+ * only for structure. Every identifier, hash and number is monospaced, because
+ * that is the register the subject actually speaks in; prose is set in a serif.
+ * Colour is rationed to semantic status — good, warning, bad — and never used
+ * decoratively, so a red cell always means something is wrong.
+ *
+ * No web fonts are loaded: the console must work on a node with no internet.
+ */
+
+:root {
+  /* ground and ink */
+  --paper:   #f6f5f1;
+  --surface: #fffefb;
+  --sunk:    #efeee8;
+  --ink:     #16181c;
+  --ink-2:   #565b63;
+  --dim:     #8b9098;
+  --rule:    #dcd9d1;
+  --rule-2:  #c6c2b8;
+
+  /* one structural accent */
+  --accent:      #1d4e89;
+  --accent-soft: #e5ecf5;
+
+  /* semantic status — reserved, never decorative */
+  --ok:      #2c6b4a;
+  --ok-soft: #e2efe7;
+  --warn:      #8a5a10;
+  --warn-soft: #f6eeda;
+  --bad:      #9d3626;
+  --bad-soft: #f7e7e3;
+
+  --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+
+  --s1: 4px; --s2: 8px; --s3: 12px; --s4: 16px; --s5: 24px; --s6: 32px; --s7: 48px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--paper);
+  /* graph paper: a 4 mm fine grid inside a 20 mm coarse one */
+  background-image:
+    linear-gradient(rgba(29,78,137,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,78,137,.045) 1px, transparent 1px),
+    linear-gradient(rgba(29,78,137,.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29,78,137,.028) 1px, transparent 1px);
+  background-size: 100px 100px, 100px 100px, 20px 20px, 20px 20px;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* the old scanline overlay has no place on paper */
+.scanlines { display: none !important; }
+
+.wrap { max-width: 1320px; margin: 0 auto; padding: 0 var(--s5) var(--s7); }
+
+/* ---------------------------------------------------------------- masthead */
+
+.mast {
+  display: flex; flex-wrap: wrap; gap: var(--s4);
+  align-items: baseline; justify-content: space-between;
+  max-width: 1320px; margin: 0 auto; padding: var(--s5) var(--s5) var(--s4);
+  border-bottom: 3px double var(--rule-2);
+}
+.mast-title { display: flex; align-items: baseline; gap: var(--s3); }
+.mast-title h1 {
+  margin: 0; font-family: var(--serif); font-size: 27px; font-weight: 600;
+  letter-spacing: -0.015em; color: var(--ink);
+}
+/* the mark is a three-node edge — the smallest drawing of the thing itself */
+.mark {
+  width: 26px; height: 14px; flex: none; align-self: center;
+  background: no-repeat center/contain url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 26 14'%3E%3Cpath d='M3 7 L13 3 L23 7 L13 11 Z' fill='none' stroke='%231d4e89' stroke-width='1.1'/%3E%3Ccircle cx='3' cy='7' r='2.2' fill='%231d4e89'/%3E%3Ccircle cx='13' cy='3' r='2.2' fill='%231d4e89'/%3E%3Ccircle cx='23' cy='7' r='2.2' fill='%231d4e89'/%3E%3Ccircle cx='13' cy='11' r='2.2' fill='%23fffefb' stroke='%231d4e89' stroke-width='1.1'/%3E%3C/svg%3E");
+}
+.eyebrow {
+  font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim);
+}
+.mast-meta { display: flex; flex-wrap: wrap; gap: var(--s2); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; letter-spacing: .04em;
+  padding: 3px 9px; border: 1px solid var(--rule-2); border-radius: 2px;
+  background: var(--surface); color: var(--ink-2); white-space: nowrap;
+}
+.chip.out  { color: var(--bad); border-color: #d9b6ad; background: var(--bad-soft); }
+.chip.err  { color: var(--bad); border-color: #d9b6ad; background: var(--bad-soft); }
+.chip.show { color: var(--ok);  border-color: #b3d2c0; background: var(--ok-soft); }
+
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+/* ------------------------------------------------------------------ banner */
+
+.banner {
+  display: none; max-width: 1320px; margin: var(--s4) auto 0; padding: 10px var(--s4);
+  border-left: 3px solid var(--warn); background: var(--warn-soft);
+  color: #6d4708; font-size: 12.5px;
+}
+.banner.show { display: block; }
+.banner.err { border-left-color: var(--bad); background: var(--bad-soft); color: #7d2b1e; }
+
+/* -------------------------------------------------------------- stat strip */
+
+.stat-strip {
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  gap: 1px; background: var(--rule); border: 1px solid var(--rule);
+  margin: var(--s5) 0;
+}
+.stat { background: var(--surface); padding: var(--s4) var(--s4) var(--s3); }
+.stat .k {
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: var(--dim);
+  margin-bottom: 6px;
+}
+.stat .v {
+  font-family: var(--serif); font-size: 30px; line-height: 1.05; font-weight: 600;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.stat .v .ok, .stat .v .bad, .stat .v .ink2 { font-family: var(--mono); font-size: 21px; }
+.stat .u { font-size: 10.5px; color: var(--dim); margin-top: 5px; }
+
+/* ------------------------------------------------------------------ panels */
+
+.cols { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s5); align-items: start; }
+.col  { display: flex; flex-direction: column; gap: var(--s5); min-width: 0; }
+
+.panel { border: 1px solid var(--rule-2); background: var(--surface); }
+.panel > header {
+  display: flex; align-items: baseline; gap: var(--s3);
+  padding: 10px var(--s4); border-bottom: 1px solid var(--rule);
+  background: var(--sunk);
+}
+.panel > header h2 {
+  margin: 0; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase;
+  font-weight: 600; color: var(--ink);
+}
+/* section rules are drawn, not typed as box-drawing glyphs */
+.rule {
+  width: 16px; height: 0; border-top: 2px solid var(--accent); flex: none;
+  align-self: center; font-size: 0; color: transparent; overflow: hidden;
+}
+.count {
+  margin-left: auto; font-size: 11px; color: var(--ink-2);
+  background: var(--surface); border: 1px solid var(--rule-2);
+  padding: 1px 7px; border-radius: 2px; font-variant-numeric: tabular-nums;
+}
+.panel-body { padding: var(--s4); }
+.panel-body.flush { padding: 0; }
+.scroll { overflow: auto; }
+
+/* ------------------------------------------------------------------ tables */
+
+table { border-collapse: collapse; width: 100%; font-size: 12px; }
+thead th {
+  position: sticky; top: 0; z-index: 1;
+  text-align: left; font-weight: 600; font-size: 10px;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--dim);
+  padding: 8px var(--s3); background: var(--sunk);
+  border-bottom: 1px solid var(--rule-2); white-space: nowrap;
+}
+tbody td {
+  padding: 7px var(--s3); border-bottom: 1px solid var(--rule);
+  vertical-align: middle; color: var(--ink);
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--accent-soft); }
+.r { text-align: right; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* an identifier is always monospace and always truncated the same way */
+.mono-id {
+  font-family: var(--mono); font-size: 11.5px; color: var(--accent);
+  background: var(--accent-soft); padding: 1px 5px; border-radius: 2px;
+  letter-spacing: .02em;
+}
+
+/* --------------------------------------------------------------- semantics */
+
+.ok   { color: var(--ok); }
+.bad  { color: var(--bad); }
+.ink2 { color: var(--ink-2); }
+.dim  { color: var(--dim); }
+
+.pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 10.5px; letter-spacing: .06em; padding: 2px 7px;
+  border: 1px solid var(--rule-2); border-radius: 2px;
+  background: var(--sunk); color: var(--ink-2); white-space: nowrap;
+}
+.pill.pass { color: var(--ok);   border-color: #b3d2c0; background: var(--ok-soft); }
+.pill.fail { color: var(--bad);  border-color: #d9b6ad; background: var(--bad-soft); }
+.pill.err  { color: var(--warn); border-color: #ddc794; background: var(--warn-soft); }
+
+/* ------------------------------------------------- pipeline stage progress */
+
+.track { display: inline-flex; gap: 2px; }
+.stg {
+  font-size: 9.5px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 1px 5px; border: 1px solid var(--rule-2); border-radius: 2px;
+  background: var(--sunk); color: var(--dim); min-width: 26px; text-align: center;
+}
+.stg.done    { background: var(--ok-soft);  color: var(--ok);   border-color: #b3d2c0; }
+.stg.active  { background: var(--accent-soft); color: var(--accent); border-color: #b6c8de; }
+.stg.failed  { background: var(--bad-soft); color: var(--bad);  border-color: #d9b6ad; }
+.stg.skipped { background: transparent;     color: var(--dim);  border-style: dashed; }
+
+/* ------------------------------------------------------------ bid ladder */
+
+.bid-row {
+  display: grid; grid-template-columns: 1fr auto auto auto;
+  gap: var(--s3); align-items: center;
+  padding: 6px var(--s3); border-bottom: 1px solid var(--rule);
+  font-size: 12px;
+}
+.bid-row:last-child { border-bottom: none; }
+/* the winner gets a solid left rule, the runner-up a dashed one — the second
+   price is the number that matters, so it must be visible without reading */
+.bid-row.win    { background: var(--ok-soft);     box-shadow: inset 3px 0 0 var(--ok); }
+.bid-row.second { background: var(--accent-soft); box-shadow: inset 3px 0 0 var(--accent); }
+.bid-row.out    { color: var(--dim); text-decoration-color: var(--dim); }
+.bid-row.out .mono-id { background: var(--sunk); color: var(--dim); }
+
+.clearing {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 10px var(--s3); margin-top: var(--s2);
+  border-top: 3px double var(--rule-2); font-size: 12px;
+}
+.clearing .num { font-family: var(--serif); font-size: 20px; font-weight: 600; }
+
+.bar { height: 8px; background: var(--accent); border-radius: 1px; }
+.stake-row { display: grid; grid-template-columns: 1fr auto; gap: var(--s3); align-items: center; }
+
+/* -------------------------------------------------------------------- misc */
+
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px var(--s4); font-size: 12px; }
+.kv .k { color: var(--dim); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--s4); }
+.row { display: flex; gap: var(--s2); align-items: center; flex-wrap: wrap; }
+
+.log {
+  font-size: 11.5px; line-height: 1.65; color: var(--ink-2);
+  max-height: 260px; overflow: auto; padding: var(--s3) var(--s4);
+  background: var(--sunk); border-top: 1px solid var(--rule);
+}
+.log b { color: var(--ink); font-weight: 600; }
+
+.empty {
+  display: flex; flex-direction: column; gap: 6px; align-items: center;
+  padding: var(--s6) var(--s4); color: var(--dim); text-align: center; font-size: 12px;
+}
+.empty b { color: var(--ink-2); font-weight: 600; letter-spacing: .04em; }
+
+.footnote {
+  margin-top: var(--s6); padding-top: var(--s4);
+  border-top: 1px solid var(--rule); font-size: 11px; color: var(--dim);
+}
+
+button, .go {
+  font-family: var(--mono); font-size: 12px; cursor: pointer;
+  padding: 6px 14px; border: 1px solid var(--accent); border-radius: 2px;
+  background: var(--surface); color: var(--accent); transition: 100ms ease;
+}
+button:hover, .go:hover { background: var(--accent); color: var(--surface); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+input, textarea, select {
+  font-family: var(--mono); font-size: 12px; padding: 6px 9px;
+  border: 1px solid var(--rule-2); border-radius: 2px;
+  background: var(--surface); color: var(--ink); width: 100%;
+}
+input:focus, textarea:focus, select:focus {
+  outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent);
+}
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ghost { color: var(--dim); }
+.f { flex: 1; }
+.p { padding: var(--s4); }
+.caret { color: var(--dim); }
+
+@media (max-width: 1080px) {
+  .cols, .split, .stat-strip { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 720px) {
+  .cols, .split, .stat-strip { grid-template-columns: 1fr; }
+  .wrap, .mast { padding-left: var(--s4); padding-right: var(--s4); }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ------------------------------------------------- states restored on review
+ * A reversed ledger row records value that moved and was then taken back. It
+ * must not read like a live row: it is struck through and desaturated, so the
+ * eye skips it when totalling the column by hand.
+ */
+tbody tr.reversed td { background: repeating-linear-gradient(
+    45deg, transparent 0 6px, rgba(157,54,38,.05) 6px 12px); color: var(--dim); }
+tbody tr.reversed td .mono-id { background: var(--sunk); color: var(--dim); }
+tbody tr.reversed td.num { text-decoration: line-through; text-decoration-color: var(--bad); }
+tbody tr.reversed:hover td { background: var(--bad-soft); }
+
+.pill.hold { color: var(--warn); border-color: #ddc794; background: var(--warn-soft); }
+
+/* a row that is currently moving through the pipeline */
+tbody tr.live td { box-shadow: inset 2px 0 0 var(--accent); }
+
+/* small type helpers the feed uses */
+.t  { color: var(--ink-2); }
+.ty { color: var(--dim); font-size: 11px; }
+.m  { font-family: var(--mono); }
+.click { cursor: pointer; }
+.click:hover { background: var(--accent-soft); }
+
+/* ------------------------------------------------ fixes found on inspection
+ * The verdict trio and the node roster were laid out by classes the panel
+ * shares with the stat strip, so they inherited nothing and sprawled. These
+ * give `.k`/`.v` a definition outside `.stat`, let `.split` hold three columns
+ * as readily as two, and stop long model names from widening the roster.
+ */
+.split { grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); }
+.split > div {
+  padding: var(--s3) var(--s4);
+  border-right: 1px solid var(--rule);
+}
+.split > div:last-child { border-right: none; }
+
+.k {
+  font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--dim); margin-bottom: 2px;
+}
+.v {
+  font-family: var(--serif); font-size: 24px; line-height: 1.1;
+  font-weight: 600; letter-spacing: -0.02em; color: var(--ink);
+}
+.split .v.p { color: var(--ok); padding: 0; }    /* pass */
+.split .v.f { color: var(--bad); flex: none; }   /* fail */
+
+/* the roster must stay one screen wide: model lists truncate, they do not wrap */
+#nodes-table td, #nodes-table th { white-space: nowrap; }
+#nodes-table td:nth-child(5) {
+  max-width: 15ch; overflow: hidden; text-overflow: ellipsis;
+  font-size: 11px; color: var(--ink-2);
+}
+#nodes-table td:first-child { line-height: 1.35; }
+
+/* ------------------------------------------------------------ navigation
+ * The console is seven pages, not one long column: a nine-column node roster
+ * and a nine-column job feed cannot share a screen and stay readable. Each
+ * page gets the full width; the nav carries the counts so nothing important
+ * is hidden behind a tab.
+ */
+.nav {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; gap: 2px; flex-wrap: wrap;
+  max-width: 1320px; margin: 0 auto; padding: 0 var(--s5);
+  background: var(--paper); border-bottom: 1px solid var(--rule);
+}
+.nav a {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 11px 15px; font-size: 12px; letter-spacing: .04em;
+  color: var(--ink-2); text-decoration: none; border: none;
+  border-bottom: 2px solid transparent; transition: 100ms ease; white-space: nowrap;
+}
+.nav a:hover { color: var(--ink); background: var(--surface); }
+.nav a.on { color: var(--accent); border-bottom-color: var(--accent); background: var(--surface); }
+.nav .tally {
+  font-size: 10px; font-variant-numeric: tabular-nums;
+  padding: 1px 6px; border-radius: 2px;
+  background: var(--sunk); border: 1px solid var(--rule-2); color: var(--dim);
+}
+.nav a.on .tally { background: var(--accent-soft); border-color: #b6c8de; color: var(--accent); }
+
+/* one page visible at a time */
+.page { display: none; }
+.page.on { display: block; }
+.page > .panel + .panel,
+.page > .stat-strip + .cols,
+.page > .cols + .panel { margin-top: var(--s5); }
+.page > .panel, .page > .stat-strip { margin-top: var(--s5); }
+
+/* a full-width page no longer needs the panels capped and clipped */
+.page[data-page] .panel-body.scroll { max-height: min(62vh, 640px); }
+
+/* the overview's pipeline summary */
+.flow { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.flow li {
+  counter-increment: step; display: grid;
+  grid-template-columns: 26px 1fr; gap: var(--s3); align-items: baseline;
+  padding: 9px 0; border-bottom: 1px solid var(--rule);
+}
+.flow li:last-child { border-bottom: none; }
+.flow li::before {
+  content: counter(step); font-size: 10.5px; color: var(--accent);
+  border: 1px solid var(--rule-2); background: var(--sunk);
+  border-radius: 2px; text-align: center; padding: 1px 0;
+}
+.flow li b { color: var(--ink); font-weight: 600; display: block; }
+.flow li span { color: var(--ink-2); font-size: 11.5px; }
+
+#log-mini { max-height: 300px; border-top: none; }
+.panel > header a.count { text-decoration: none; color: var(--accent); border: 1px solid var(--rule-2); }
+.panel > header a.count:hover { background: var(--accent-soft); }
+
+@media (max-width: 720px) {
+  .nav { padding: 0 var(--s4); }
+  .nav a { padding: 10px 11px; font-size: 11.5px; }
+}
+
+/* ------------------------------------------------------ fixes on inspection
+ * `.flow li` is a two-column grid and `b`/`span` are both direct children, so
+ * the span was landing in the 26px marker column and wrapping one word per
+ * line. Both belong in the second column.
+ */
+.flow li b, .flow li span { grid-column: 2; }
+.flow li span { line-height: 1.45; }
+
+/* the log's three fields were butting together with no separation */
+.log > div {
+  display: grid; grid-template-columns: 62px 88px 1fr; gap: var(--s3);
+  align-items: baseline; padding: 1px 0;
+}
+.log > div > .t  { color: var(--dim); font-variant-numeric: tabular-nums; }
+.log > div > .ty { color: var(--accent); font-size: 10.5px; letter-spacing: .04em;
+                   overflow: hidden; text-overflow: ellipsis; }
+.log > div > .m  { color: var(--ink-2); }
+.log > div.good > .m { color: var(--ok); }
+.log > div.warn > .m { color: var(--bad); }
+@media (max-width: 720px) {
+  .log > div { grid-template-columns: 54px 1fr; }
+  .log > div > .ty { grid-column: 2; }
+  .log > div > .m { grid-column: 1 / -1; }
+}

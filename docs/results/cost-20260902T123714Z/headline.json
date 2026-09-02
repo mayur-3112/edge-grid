@@ -1,0 +1,24 @@
+{
+  "tokens_per_job": 45.6,
+  "jobs_per_1k_tokens": 21.93,
+  "grid_per_1k_tokens": 1.096491,
+  "inference_usd_per_1k": 0.00109649,
+  "verification_usd_per_1k": 5.482e-05,
+  "verification_share_pct": 4.76,
+  "total_usd_per_1k": 0.00115132,
+  "centralised_usd_per_1k": 0.002,
+  "ratio_vs_centralised": 0.5757,
+  "sample_rate": 0.05,
+  "grid_usd_rate": 0.001,
+  "settlement_gas_honest_path": 421497,
+  "settlement_gas_fraud_path": 469682,
+  "gas_note": "gas is reported in units, not dollars: a local chain has no gas price and no ETH price, and inventing them would be a fabrication",
+  "caveat": "GRID has no market price. Dollar figures are a cost MODEL at a stated notional rate, not a market observation. The GRID-denominated and gas-denominated figures are the actual measurements.",
+  "sources": {
+    "inference": "inference-benchmark-20260902T120811Z",
+    "settlement": "settlement-onchain-20260902T120752Z",
+    "verification": "verification-20260902T121801Z"
+  },
+  "judge": "ollama/qwen3-vl:2b-instruct",
+  "model": "qwen3-vl:2b-instruct"
+}

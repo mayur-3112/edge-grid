@@ -12,3 +12,34 @@ cache/
 implementation_plan.md
 
 
+.da/
+# Result runs are not committed by default - they accumulate fast and most are
+# smoke runs. The exception is the handful the report actually cites: those are
+# the evidence behind every number in Chapter 8 and are kept in the repo so any
+# figure can be traced back to the run that produced it (see docs/results/CITED.md).
+docs/results/*/
+!docs/results/index.jsonl
+!docs/results/run_all.json
+!docs/results/CITED.md
+!docs/results/inference-benchmark-20260902T120811Z/
+!docs/results/exp2-auction-convergence-summary-20260902T110609Z/
+!docs/results/verification-20260902T121801Z/
+!docs/results/paraphrase-20260902T133202Z/
+!docs/results/settlement-onchain-20260902T120752Z/
+!docs/results/cost-20260902T123714Z/
+!docs/results/weights-20260902T170213Z/
+!docs/results/exp2-swarm-containers-20260902T170808Z/
+!docs/results/exp2-swarm-netem-10ms-20260902T164741Z/
+!docs/results/exp2-swarm-netem-25ms-20260902T164817Z/
+!docs/results/exp2-swarm-netem-50ms-20260902T164859Z/
+!docs/results/judge-panel-20260902T173031Z/
+# ...but never the DA blob copies inside them, which regenerate.
+docs/results/*/da/
+contracts/artifacts/
+contracts/cache/
+contracts/deployment.json
+.pytest_cache/
+docs/figures/figures.json
+
+# local content-addressed weight cache
+.weights/

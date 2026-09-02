@@ -1,0 +1,8 @@
+[    0.01s] cold fetches cross a loopback HTTP API to a kubo daemon on this host; they measure client-side fetch and verification cost, not WAN transfer
+[    0.01s] artefacts and caches under /tmp/edgegrid-weights-exp-h5ptfin2, removed when the run ends
+[    0.27s] published synth-weights-65536 65536B -> QmWNRD9YgbxSS9kFE9GPoCXHY7meRB3wstsWxvHCWbt5gT in 258.7ms
+[    0.52s] published synth-weights-1048576 1048576B -> QmSrHNhA55vUHSSXEe7suNrjb2nbu4y4FA1RL47AN2EdpE in 247.2ms
+[    0.80s] published synth-weights-4194304 4194304B -> QmbbbeKoEFN9g3amA81An8hwUWEmNafKGsGpQ1eHts3yqL in 254.0ms
+[    1.29s] published synth-weights-16777216 16777216B -> QmQzcjHeeeyFjcSttKmVMzMTowQhC5CgHvdcKknxpzsJ1V in 365.1ms
+[    1.99s] published synth-weights-50331648 50331648B -> QmPm1SWK5L3Z3dpEyE4VeLoefkv7p7zCmCRUj2zrMUQ4mU in 353.9ms
+[    3.01s] second pass hit 0/5. A repeated sequential scan of a working set larger than the budget (72417280 > 51380224 bytes) is the worst case for LRU: each fetch evicts the entry the next fetch would have wanted. That is a property of the access pattern, not a defect - the per-model reuse a node actually has is the cold/warm pair in artefacts.csv

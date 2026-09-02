@@ -1,0 +1,34 @@
+{
+  "models": {
+    "synth-weights-65536": {
+      "cid": "QmWNRD9YgbxSS9kFE9GPoCXHY7meRB3wstsWxvHCWbt5gT",
+      "sha256": "6173153ed95b79346c29ab53a74fc3afa030a338fb796bcc4394d66a6ec955f7",
+      "bytes": 65536,
+      "published_utc": "2026-09-02T17:02:14Z"
+    },
+    "synth-weights-1048576": {
+      "cid": "QmSrHNhA55vUHSSXEe7suNrjb2nbu4y4FA1RL47AN2EdpE",
+      "sha256": "08b2a8da54e3e185f025ac53633deae5a583c8880a72a21e169a1da022baa003",
+      "bytes": 1048576,
+      "published_utc": "2026-09-02T17:02:14Z"
+    },
+    "synth-weights-4194304": {
+      "cid": "QmbbbeKoEFN9g3amA81An8hwUWEmNafKGsGpQ1eHts3yqL",
+      "sha256": "e0aa5fcdb994f3097c5395c64bf6be70b8bd06b6b2517810abfe6480ea5fc34e",
+      "bytes": 4194304,
+      "published_utc": "2026-09-02T17:02:14Z"
+    },
+    "synth-weights-16777216": {
+      "cid": "QmQzcjHeeeyFjcSttKmVMzMTowQhC5CgHvdcKknxpzsJ1V",
+      "sha256": "886bae9e5e6751f9cc477cbb2a7886e338110f28a6fbae08c030eef1e972c537",
+      "bytes": 16777216,
+      "published_utc": "2026-09-02T17:02:15Z"
+    },
+    "synth-weights-50331648": {
+      "cid": "QmPm1SWK5L3Z3dpEyE4VeLoefkv7p7zCmCRUj2zrMUQ4mU",
+      "sha256": "6771fcbce4828fa58e1b4979c8b700d14fdd72c764bfc1b9a519f87a7adecca1",
+      "bytes": 50331648,
+      "published_utc": "2026-09-02T17:02:15Z"
+    }
+  }
+}

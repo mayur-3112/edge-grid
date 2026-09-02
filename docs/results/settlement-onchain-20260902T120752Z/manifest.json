@@ -1,0 +1,13 @@
+{
+  "run_id": "settlement-onchain-20260902T120752Z",
+  "experiment": "settlement-onchain",
+  "finished_utc": "2026-09-02T12:07:54.278593+00:00",
+  "elapsed_s": 1.8,
+  "rows": {
+    "settlements": 3
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

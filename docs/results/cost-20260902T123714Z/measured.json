@@ -1,0 +1,17 @@
+{
+  "tokens_per_job": 45.6,
+  "ms_per_job": 4165.483150000001,
+  "tokens_per_sec": 12.861500000000001,
+  "model": "qwen3-vl:2b-instruct",
+  "price_per_job_grid": 0.05,
+  "honest_gas": 421497,
+  "fraud_gas": 469682,
+  "judge_calls_per_audit": 1.0,
+  "judge_backend": "ollama",
+  "judge_model": "qwen3-vl:2b-instruct",
+  "sources": {
+    "inference": "inference-benchmark-20260902T120811Z",
+    "settlement": "settlement-onchain-20260902T120752Z",
+    "verification": "verification-20260902T121801Z"
+  }
+}

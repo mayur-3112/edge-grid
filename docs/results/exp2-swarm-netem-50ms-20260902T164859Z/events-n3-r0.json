@@ -1,0 +1,386 @@
+{
+  "node0": [
+    {
+      "event": "container",
+      "node": "node0",
+      "advertise_ip": "10.77.0.10",
+      "hostname": "node0",
+      "interfaces": "lo 127.0.0.1/8\neth0 10.77.0.10/24",
+      "netem_dev": "eth0"
+    },
+    {
+      "event": "netem",
+      "node": "node0",
+      "applied": true,
+      "delay_ms": 50.0,
+      "dev": "eth0",
+      "qdisc": "qdisc netem 8013: root refcnt 17 limit 1000 delay 50ms seed 7900278526044924449"
+    },
+    {
+      "event": "ollama_probe",
+      "node": "node0",
+      "host": "http://host.docker.internal:11434",
+      "reachable": false,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+      "probe_ms": 140.5
+    },
+    {
+      "event": "ready",
+      "node": "eg3c-0",
+      "role": "requester",
+      "peer_id": "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "wallet": "0x857fdF2D6829A03a262952b26CcBB87db8f672A3",
+      "multiaddr": "/ip4/10.77.0.10/tcp/4001/p2p/16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "hb_port": 14001,
+      "model": "qwen3-vl:2b-instruct",
+      "price": 0.05,
+      "warm": false,
+      "forge_bids": false,
+      "tier": 1,
+      "mesh": 0,
+      "meshed": false,
+      "ttft_ms": 1500.0,
+      "n_bootstrap": 0,
+      "bootstrap_ok": 0,
+      "bootstrap_failed": 0,
+      "routing_table": 0,
+      "ts_ms": 1788367748375
+    },
+    {
+      "event": "mesh",
+      "want_peers": 2,
+      "mesh": 2,
+      "reached": true,
+      "routing_table": 0,
+      "ts_ms": 1788367754677,
+      "node": "eg3c-0"
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+      "source": "local",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x6B4067111e8e39F6Af1774408D3f32b7a82fE87e",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.11/tcp/4001/p2p/16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+        "/ip4/10.77.0.11/udp/14001"
+      ],
+      "ts_ms": 1788367754678,
+      "node": "eg3c-0"
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+      "source": "local",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x25e43a4fA814ea0a99655310395032F75f84F932",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.12/tcp/4001/p2p/16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+        "/ip4/10.77.0.12/udp/14001"
+      ],
+      "ts_ms": 1788367754679,
+      "node": "eg3c-0"
+    },
+    {
+      "event": "job_published",
+      "node": "eg3c-0",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "model": "qwen3-vl:2b-instruct",
+      "max_price": 0.2,
+      "max_latency_ms": 30000,
+      "ts_ms": 1788367755184
+    },
+    {
+      "event": "bid_received",
+      "node": "eg3c-0",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "from": "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+      "price": 0.09,
+      "warm": false,
+      "ts_ms": 1788367755302
+    },
+    {
+      "event": "bid_received",
+      "node": "eg3c-0",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "from": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+      "price": 0.07,
+      "warm": false,
+      "ts_ms": 1788367755308
+    },
+    {
+      "event": "auction_closed",
+      "node": "eg3c-0",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "auction_ms": 2004.3,
+      "n_received": 2,
+      "n_eligible": 2,
+      "n_accounted": 2,
+      "rejected": {},
+      "bids": [
+        {
+          "peer": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+          "price": 0.07,
+          "effective": 0.07,
+          "warm": false,
+          "ttft_ms": 1300.0
+        },
+        {
+          "peer": "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+          "price": 0.09,
+          "effective": 0.09,
+          "warm": false,
+          "ttft_ms": 1400.0
+        }
+      ],
+      "award": {
+        "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+        "winner_peer_id": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+        "winner_wallet": "0x6B4067111e8e39F6Af1774408D3f32b7a82fE87e",
+        "clearing_price": 0.09,
+        "winning_bid_price": 0.07,
+        "n_bids": 2,
+        "auction_ms": 2004.3010209992644,
+        "created_ms": 1788367757188,
+        "signature": "bfb7b1d7e42ce07fcfab5f697ec808dad25ecbed73e935ae7218550863af17e622e3bb4b5f0761306badc149565eb3b78d9a7d21a10c4313e8a48a624920cf6900"
+      },
+      "ts_ms": 1788367757191
+    }
+  ],
+  "node1": [
+    {
+      "event": "container",
+      "node": "node1",
+      "advertise_ip": "10.77.0.11",
+      "hostname": "node1",
+      "interfaces": "lo 127.0.0.1/8\neth0 10.77.0.11/24",
+      "netem_dev": "eth0"
+    },
+    {
+      "event": "netem",
+      "node": "node1",
+      "applied": true,
+      "delay_ms": 50.0,
+      "dev": "eth0",
+      "qdisc": "qdisc netem 8015: root refcnt 17 limit 1000 delay 50ms seed 2611034255321271756"
+    },
+    {
+      "event": "ollama_probe",
+      "node": "node1",
+      "host": "http://host.docker.internal:11434",
+      "reachable": false,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+      "probe_ms": 153.5
+    },
+    {
+      "event": "connected",
+      "node": "eg3c-1",
+      "peer": "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "ts_ms": 1788367753844
+    },
+    {
+      "event": "ready",
+      "node": "eg3c-1",
+      "role": "provider",
+      "peer_id": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+      "wallet": "0x6B4067111e8e39F6Af1774408D3f32b7a82fE87e",
+      "multiaddr": "/ip4/10.77.0.11/tcp/4001/p2p/16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+      "hb_port": 14001,
+      "model": "qwen3-vl:2b-instruct",
+      "price": 0.07,
+      "warm": false,
+      "forge_bids": false,
+      "tier": 1,
+      "mesh": 1,
+      "meshed": true,
+      "ttft_ms": 1300.0,
+      "n_bootstrap": 1,
+      "bootstrap_ok": 1,
+      "bootstrap_failed": 0,
+      "routing_table": 1,
+      "ts_ms": 1788367754629
+    },
+    {
+      "event": "mesh",
+      "want_peers": 1,
+      "mesh": 1,
+      "reached": true,
+      "routing_table": 1,
+      "ts_ms": 1788367754630,
+      "node": "eg3c-1"
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "source": "network",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x857fdF2D6829A03a262952b26CcBB87db8f672A3",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.10/tcp/4001/p2p/16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+        "/ip4/10.77.0.10/udp/14001"
+      ],
+      "ts_ms": 1788367754962,
+      "node": "eg3c-1"
+    },
+    {
+      "event": "bid_sent",
+      "node": "eg3c-1",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "price": 0.07,
+      "warm": false,
+      "ttft_ms": 1300.0,
+      "forged": false,
+      "ts_ms": 1788367755248
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+      "source": "network",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x25e43a4fA814ea0a99655310395032F75f84F932",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.12/tcp/4001/p2p/16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+        "/ip4/10.77.0.12/udp/14001"
+      ],
+      "ts_ms": 1788367755289,
+      "node": "eg3c-1"
+    },
+    {
+      "event": "won",
+      "node": "eg3c-1",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "clearing_price": 0.09,
+      "own_bid": 0.07,
+      "ts_ms": 1788367757250
+    }
+  ],
+  "node2": [
+    {
+      "event": "container",
+      "node": "node2",
+      "advertise_ip": "10.77.0.12",
+      "hostname": "node2",
+      "interfaces": "lo 127.0.0.1/8\neth0 10.77.0.12/24",
+      "netem_dev": "eth0"
+    },
+    {
+      "event": "netem",
+      "node": "node2",
+      "applied": true,
+      "delay_ms": 50.0,
+      "dev": "eth0",
+      "qdisc": "qdisc netem 8014: root refcnt 17 limit 1000 delay 50ms seed 6217708675502622479"
+    },
+    {
+      "event": "ollama_probe",
+      "node": "node2",
+      "host": "http://host.docker.internal:11434",
+      "reachable": false,
+      "error": "URLError: <urlopen error [Errno 111] Connection refused>",
+      "probe_ms": 152.1
+    },
+    {
+      "event": "connected",
+      "node": "eg3c-2",
+      "peer": "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "ts_ms": 1788367753677
+    },
+    {
+      "event": "ready",
+      "node": "eg3c-2",
+      "role": "provider",
+      "peer_id": "16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+      "wallet": "0x25e43a4fA814ea0a99655310395032F75f84F932",
+      "multiaddr": "/ip4/10.77.0.12/tcp/4001/p2p/16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1",
+      "hb_port": 14001,
+      "model": "qwen3-vl:2b-instruct",
+      "price": 0.09,
+      "warm": false,
+      "forge_bids": false,
+      "tier": 1,
+      "mesh": 1,
+      "meshed": true,
+      "ttft_ms": 1400.0,
+      "n_bootstrap": 1,
+      "bootstrap_ok": 1,
+      "bootstrap_failed": 0,
+      "routing_table": 1,
+      "ts_ms": 1788367754548
+    },
+    {
+      "event": "mesh",
+      "want_peers": 1,
+      "mesh": 1,
+      "reached": true,
+      "routing_table": 1,
+      "ts_ms": 1788367754548,
+      "node": "eg3c-2"
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+      "source": "network",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x857fdF2D6829A03a262952b26CcBB87db8f672A3",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.10/tcp/4001/p2p/16Uiu2HAm5afem2vZvFQkqtdhiyZKijg2eegwDQdsjb3aEgz6dY8G",
+        "/ip4/10.77.0.10/udp/14001"
+      ],
+      "ts_ms": 1788367754889,
+      "node": "eg3c-2"
+    },
+    {
+      "event": "dht_lookup",
+      "peer": "16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+      "source": "network",
+      "ok": true,
+      "attempts": 1,
+      "wallet": "0x6B4067111e8e39F6Af1774408D3f32b7a82fE87e",
+      "models": [
+        "qwen3-vl:2b-instruct"
+      ],
+      "tier": 1,
+      "multiaddrs": [
+        "/ip4/10.77.0.11/tcp/4001/p2p/16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53",
+        "/ip4/10.77.0.11/udp/14001"
+      ],
+      "ts_ms": 1788367755216,
+      "node": "eg3c-2"
+    },
+    {
+      "event": "bid_sent",
+      "node": "eg3c-2",
+      "job_id": "602da2b5-63cf-426d-82e8-7e418deb4a26",
+      "price": 0.09,
+      "warm": false,
+      "ttft_ms": 1400.0,
+      "forged": false,
+      "ts_ms": 1788367755243
+    }
+  ]
+}

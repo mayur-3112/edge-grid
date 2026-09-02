@@ -1,0 +1,28 @@
+{
+  "backend": "ollama",
+  "host": "http://localhost:11434",
+  "model": "qwen3-vl:2b-instruct",
+  "served_models": [
+    "qwen3-vl:2b-instruct"
+  ],
+  "n_pairs": 5,
+  "max_tokens": 64,
+  "cold_ttft_ms_n": 5,
+  "cold_ttft_ms_mean": 7963.81,
+  "cold_ttft_ms_median": 7809.91,
+  "cold_ttft_ms_p95": 8231.36,
+  "cold_ttft_ms_min": 7761.22,
+  "cold_ttft_ms_max": 8237.15,
+  "cold_ttft_ms_stdev": 237.25,
+  "warm_ttft_ms_n": 5,
+  "warm_ttft_ms_mean": 653.67,
+  "warm_ttft_ms_median": 600.77,
+  "warm_ttft_ms_p95": 789.88,
+  "warm_ttft_ms_min": 546.6,
+  "warm_ttft_ms_max": 805.32,
+  "warm_ttft_ms_stdev": 108.59,
+  "cold_load_ms_mean": 7418.45,
+  "warm_load_ms_mean": 568.04,
+  "cold_over_warm_ratio": 12.18,
+  "ttft_penalty_ms": 7310.14
+}

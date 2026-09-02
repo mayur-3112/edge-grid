@@ -1,0 +1,123 @@
+{
+  "run_id": "judge-panel-20260902T173031Z",
+  "items_key": "d35d0c332bac",
+  "n_items": 99,
+  "n_judge_calls": 396,
+  "n_items_replayed_from_cache": 0,
+  "judge_seconds": 424.8,
+  "configs": [
+    "qwen-27b",
+    "nemotron-120b",
+    "minimax-m3",
+    "ling-3-flash",
+    "panel-majority",
+    "panel-unanimous",
+    "panel-any_fail"
+  ],
+  "pass_threshold": 3,
+  "panel_diverse": true,
+  "panel_families": [
+    "inclusionai-ling",
+    "minimax",
+    "nvidia-nemotron",
+    "qwen"
+  ],
+  "n_items_members_disagreed": 7,
+  "n_items_comparable": 99,
+  "disagreement_rate": 0.0707,
+  "agreement": [
+    {
+      "judge_a": "ling-3-flash",
+      "judge_b": "minimax-m3",
+      "n_compared": 13,
+      "n_shared_items": 99,
+      "n_excluded_error": 86,
+      "raw_agreement": 0.9231,
+      "cohens_kappa": 0.0,
+      "kappa_note": ""
+    },
+    {
+      "judge_a": "ling-3-flash",
+      "judge_b": "nemotron-120b",
+      "n_compared": 11,
+      "n_shared_items": 99,
+      "n_excluded_error": 88,
+      "raw_agreement": 1.0,
+      "cohens_kappa": 1.0,
+      "kappa_note": ""
+    },
+    {
+      "judge_a": "ling-3-flash",
+      "judge_b": "qwen-27b",
+      "n_compared": 13,
+      "n_shared_items": 99,
+      "n_excluded_error": 86,
+      "raw_agreement": 1.0,
+      "cohens_kappa": 1.0,
+      "kappa_note": ""
+    },
+    {
+      "judge_a": "minimax-m3",
+      "judge_b": "nemotron-120b",
+      "n_compared": 16,
+      "n_shared_items": 99,
+      "n_excluded_error": 83,
+      "raw_agreement": 0.9375,
+      "cohens_kappa": 0.7647,
+      "kappa_note": ""
+    },
+    {
+      "judge_a": "minimax-m3",
+      "judge_b": "qwen-27b",
+      "n_compared": 99,
+      "n_shared_items": 99,
+      "n_excluded_error": 0,
+      "raw_agreement": 0.9293,
+      "cohens_kappa": 0.7574,
+      "kappa_note": ""
+    },
+    {
+      "judge_a": "nemotron-120b",
+      "judge_b": "qwen-27b",
+      "n_compared": 16,
+      "n_shared_items": 99,
+      "n_excluded_error": 83,
+      "raw_agreement": 0.9375,
+      "cohens_kappa": 0.7647,
+      "kappa_note": ""
+    }
+  ],
+  "hypothesis": {
+    "hypothesis": "model diversity matters more than model size for an LLM judge (Chapter 9, future work)",
+    "result": "not computed",
+    "why": "configuration(s) ['gptoss-20b', 'qwen3vl-2b'] were not part of this run",
+    "best_individual": {
+      "config": "nemotron-120b",
+      "f1_bal": 1.0,
+      "recall": 1.0,
+      "fpr": 0.0
+    },
+    "best_panel": {
+      "config": "panel-majority",
+      "f1_bal": 0.9549,
+      "recall": 0.9747,
+      "fpr": 0.0667,
+      "error_rate": 0.0505
+    },
+    "panel_beats_every_individual": false
+  },
+  "items_dataset_source": "truthfulqa-cache",
+  "items_generator_backend": "groq",
+  "items_generator_model": "openai/gpt-oss-120b",
+  "items_honest_source": "groq",
+  "items_n_questions_loaded": 20,
+  "items_n_items": 99,
+  "items_from_cache": false,
+  "n_items_dropped_invalid": 1,
+  "dropped": [
+    {
+      "what": "q16:honest",
+      "why": "groq returned no answer outside its reasoning block; raise GEN_MAX_TOKENS or choose a non-reasoning model"
+    }
+  ]
+}

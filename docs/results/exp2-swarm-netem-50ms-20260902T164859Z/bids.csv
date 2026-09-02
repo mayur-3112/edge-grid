@@ -1,0 +1,5 @@
+n_nodes,repeat,job_id,rank,bidder,price,effective,warm,ttft_ms
+3,0,602da2b5-63cf-426d-82e8-7e418deb4a26,0,16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53,0.07,0.07,False,1300.0
+3,0,602da2b5-63cf-426d-82e8-7e418deb4a26,1,16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1,0.09,0.09,False,1400.0
+3,1,f39d1090-99e3-47eb-bd98-d7058673b00a,0,16Uiu2HAmG7UwJR5darevAogbtsY5jjKSthzPRwjpwBWiphqUAA53,0.07,0.07,False,1300.0
+3,1,f39d1090-99e3-47eb-bd98-d7058673b00a,1,16Uiu2HAkwdnLLxqCL624oTQvYHbgoiXKe5vU3W3DTJnPT7BAvXu1,0.09,0.09,False,1400.0

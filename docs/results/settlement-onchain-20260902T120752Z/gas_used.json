@@ -1,0 +1,10 @@
+{
+  "stake": 35402,
+  "setValidator": 47827,
+  "openEscrow": 126933,
+  "recordCommitment": 184028,
+  "release": 78219,
+  "withdraw:marketplace": 32317,
+  "proveDataMismatch": 221353,
+  "submitVerdict": 158721
+}

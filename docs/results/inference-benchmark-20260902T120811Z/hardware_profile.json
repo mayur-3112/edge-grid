@@ -1,0 +1,30 @@
+{
+  "backend": "ollama",
+  "host": "http://localhost:11434",
+  "benchmark_model": "qwen3-vl:2b-instruct",
+  "tier": 1,
+  "tier_name": "CPU",
+  "cpu_count": 16,
+  "cpu_count_physical": 10,
+  "ram_gb": 30.94,
+  "ram_available_gb": 17.85,
+  "vram_gb": 0.0,
+  "accelerator": "none",
+  "accelerator_name": "x86_64",
+  "detected_by": "no accelerator probe matched",
+  "platform": "Linux-7.0.0-30-generic-x86_64-with-glibc2.39",
+  "machine": "x86_64",
+  "tokens_per_sec": 13.97,
+  "tokens_per_sec_error": "",
+  "models": [
+    "qwen3-vl:2b-instruct",
+    "qwen3-vl:2b",
+    "qwen3-vl:latest",
+    "nomic-embed-text:latest"
+  ],
+  "warm_models": [
+    "qwen3-vl:2b-instruct"
+  ],
+  "models_error": "",
+  "served_model": "qwen3-vl:2b-instruct"
+}

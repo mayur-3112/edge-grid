@@ -1,0 +1,53 @@
+# A single kubo node for content-addressed model weight distribution.
+#
+# Why a real daemon and not a stand-in: the property `edgegrid.weights` relies on
+# is that a CID is a commitment to the bytes. That property is only demonstrated
+# if the bytes make a round trip through software that was not written by this
+# project. Everything else here - the LRU cache, the resolver, the corruption
+# test - is checked against what this node actually returns.
+#
+# Ports are published on the loopback address only. The kubo HTTP API is an
+# unauthenticated control plane (it can pin, unpin and reconfigure the node), so
+# binding it to a LAN interface would hand that control to the LAN. The swarm
+# port is the one that is meant to be public and is the only one bound to
+# 0.0.0.0.
+#
+#   make ipfs-up      # start, wait for the API to answer
+#   make ipfs-down    # stop and remove the container (the volume survives)
+#
+# Override the host-side ports when something else already owns them:
+#   IPFS_GATEWAY_PORT=8088 make ipfs-up
+
+name: edgegrid-ipfs
+
+services:
+  kubo:
+    image: ipfs/kubo:latest
+    container_name: edgegrid-ipfs
+    restart: unless-stopped
+    environment:
+      # `server` disables local-network peer discovery, which otherwise floods a
+      # LAN with mDNS traffic from a node nobody asked to find.
+      IPFS_PROFILE: server
+    ports:
+      - "127.0.0.1:${IPFS_API_PORT:-5001}:5001"       # HTTP API - control plane
+      - "127.0.0.1:${IPFS_GATEWAY_PORT:-8080}:8080"   # read-only gateway
+      - "${IPFS_SWARM_PORT:-4001}:4001/tcp"           # peer swarm
+      - "${IPFS_SWARM_PORT:-4001}:4001/udp"
+    volumes:
+      # Named volumes, so the repository working tree stays clean and a
+      # `make ipfs-down` does not throw away the blockstore.
+      - edgegrid_ipfs_data:/data/ipfs
+      - ./container-init.d:/container-init.d:ro
+    healthcheck:
+      # `ipfs id` over the local API is the cheapest proof the daemon is serving,
+      # not merely that the process started.
+      test: ["CMD", "ipfs", "--api=/ip4/127.0.0.1/tcp/5001", "id"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 5s
+
+volumes:
+  edgegrid_ipfs_data:
+    name: edgegrid_ipfs_data

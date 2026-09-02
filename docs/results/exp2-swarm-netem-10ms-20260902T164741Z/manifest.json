@@ -1,0 +1,16 @@
+{
+  "run_id": "exp2-swarm-netem-10ms-20260902T164741Z",
+  "experiment": "exp2-swarm-netem-10ms",
+  "finished_utc": "2026-09-02T16:48:15.408844+00:00",
+  "elapsed_s": 34.08,
+  "rows": {
+    "nodes": 6,
+    "dht_lookups": 12,
+    "auctions": 2,
+    "bids": 4
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

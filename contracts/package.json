@@ -1,0 +1,1 @@
+{"name":"edge-grid-contracts","version":"1.0.0","private":true,"type":"commonjs","dependencies":{"@nomicfoundation/hardhat-chai-matchers":"^2.0.8","@nomicfoundation/hardhat-ethers":"^3.0.8","@nomicfoundation/hardhat-network-helpers":"^1.0.12","chai":"^4.5.0","ethers":"^6.13.4","hardhat":"^2.22.17"}}

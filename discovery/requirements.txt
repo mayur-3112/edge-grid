@@ -1,2 +1,4 @@
-libp2p
+libp2p==0.7.0
 trio
+psutil
+multiaddr

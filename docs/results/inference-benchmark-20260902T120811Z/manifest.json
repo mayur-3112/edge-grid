@@ -1,0 +1,20 @@
+{
+  "run_id": "inference-benchmark-20260902T120811Z",
+  "experiment": "inference-benchmark",
+  "finished_utc": "2026-09-02T12:11:05.669953+00:00",
+  "elapsed_s": 174.574,
+  "rows": {
+    "trials": 20,
+    "cold_warm_trials": 10
+  },
+  "dropped": [
+    {
+      "what": "trials",
+      "why": "warmup trial discarded by design (conflates load with generation)",
+      "at": 10.061786916998244
+    }
+  ],
+  "n_dropped": 1,
+  "error": null,
+  "status": "ok"
+}

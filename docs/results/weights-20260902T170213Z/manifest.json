@@ -1,0 +1,16 @@
+{
+  "run_id": "weights-20260902T170213Z",
+  "experiment": "weights",
+  "finished_utc": "2026-09-02T17:02:18.415801+00:00",
+  "elapsed_s": 4.454,
+  "rows": {
+    "artefacts": 5,
+    "second_pass": 5,
+    "lru_order": 1,
+    "verification": 4
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

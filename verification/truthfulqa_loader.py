@@ -1,23 +1,72 @@
-"""
-TruthfulQA dataset loader and sampler for The Edge Grid verification harness.
+"""TruthfulQA subset loader, with the dataset's provenance attached to it.
 
-Downloads and caches a sampled subset of TruthfulQA questions with both
-correct/truthful reference answers and known incorrect/hallucinated answers.
+Every question this returns carries a `source` field, and the loader will not
+hand back data whose origin it cannot state. That constraint exists because of a
+concrete failure: the previous version wrapped the HuggingFace download in a
+bare `except Exception`, printed a warning, and substituted ten questions
+hand-written inside this repo, cycling them to fill `n`. It then printed
+"Successfully loaded and cached 20 TruthfulQA questions". Nothing in the
+returned records, the cache it wrote, or any downstream run said the data was
+not TruthfulQA - so a harness could report "N=60 TruthfulQA items" while
+measuring six repeats of ten questions the project wrote for itself, which are
+substantially easier than the real benchmark. `datasets` is not installed in
+this environment, so that path was the *only* one a cache miss could take.
+
+The rules now:
+
+  * `source` is on every record and is carried into the run's raw rows, so a
+    result can always be attributed to a dataset.
+  * the curated fallback is opt-in (`allow_curated_fallback=True`) and labels
+    itself `curated-fallback`; by default a download failure raises.
+  * a cache is classified rather than trusted: a cache file written before this
+    column existed is checked against the curated question set, and gets
+    `truthfulqa-cache` only when it provably contains none of them and repeats
+    no question.
+  * asking for more questions than exist raises instead of quietly returning
+    fewer, which is how an `n=60` run could silently become an `n=10` run.
 """
+
+from __future__ import annotations
 
 import csv
 import json
-import os
 import random
+import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any, Optional
 
-try:
-    from .config import DATA_DIR, TRUTHFULQA_SUBSET_SIZE
-except (ImportError, ValueError):
-    from config import DATA_DIR, TRUTHFULQA_SUBSET_SIZE
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
-# Fallback curated questions in case HuggingFace datasets cannot be reached
+from edgegrid import config as C
+
+# `verification/config.py` used to hold a second, divergent copy of these
+# settings (its judge-model default named a model that does not exist). There is
+# now one source of truth, `edgegrid/config.py`, so a run's config.json describes
+# the run that actually happened.
+DATA_DIR = C.DATA_DIR
+TRUTHFULQA_SUBSET_SIZE = 60
+
+SOURCE_HF = "truthfulqa-hf"
+SOURCE_CACHE = "truthfulqa-cache"
+SOURCE_CURATED = "curated-fallback"
+SOURCE_UNLABELLED = "cache-unlabelled"
+SOURCE_CURATED_CACHE = "curated-fallback-cache"
+
+_FIELDS = ["question_id", "question", "best_answer", "correct_answers",
+           "incorrect_answers", "source"]
+
+
+class DatasetError(RuntimeError):
+    """The requested dataset cannot be produced as asked.
+
+    Raised instead of substituting a different corpus. The identity of the
+    evaluation set is part of every number measured on it."""
+
+
+# Ten questions written for this repo. They are NOT TruthfulQA and are only
+# reachable via `allow_curated_fallback=True`, which labels every row it emits.
 CURATED_TRUTHFULQA_SAMPLES = [
     {
         "question": "What happens if you swallow chewing gum?",
@@ -81,114 +130,179 @@ CURATED_TRUTHFULQA_SAMPLES = [
     }
 ]
 
+_CURATED_QUESTIONS = {s["question"].strip().lower() for s in CURATED_TRUTHFULQA_SAMPLES}
 
-def load_truthfulqa_subset(
-    n: int = TRUTHFULQA_SUBSET_SIZE,
-    cache_path: str = None,
-    seed: int = 42,
-) -> List[Dict[str, Any]]:
-    """
-    Loads or downloads a sampled TruthfulQA subset.
-    Returns:
-        List of dicts with:
-        - question_id (int)
-        - question (str)
-        - best_answer (str)
-        - correct_answers (list of str)
-        - incorrect_answers (list of str)
-    """
-    if cache_path is None:
-        cache_path = os.path.join(DATA_DIR, "truthfulqa_subset.csv")
 
-    cache_file = Path(cache_path)
+def dataset_source(records: list[dict]) -> str:
+    """The single source label for a loaded subset.
 
-    # 1. If cached CSV exists, load and return
-    if cache_file.exists():
-        records = []
-        with open(cache_file, "r", encoding="utf-8") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                records.append({
-                    "question_id": int(row["question_id"]),
-                    "question": row["question"],
-                    "best_answer": row["best_answer"],
-                    "correct_answers": json.loads(row.get("correct_answers", "[]")),
-                    "incorrect_answers": json.loads(row.get("incorrect_answers", "[]")),
-                })
-        if len(records) >= n:
-            return records[:n]
-        elif records:
-            return records
+    A mixed subset is reported as such rather than as either of its halves."""
+    labels = sorted({r.get("source", SOURCE_UNLABELLED) for r in records})
+    if not labels:
+        return "empty"
+    return labels[0] if len(labels) == 1 else "mixed:" + "+".join(labels)
 
-    # 2. Try downloading via datasets library
-    records = []
-    try:
-        from datasets import load_dataset
-        ds = load_dataset("truthfulqa/truthful_qa", "generation", split="validation")
-        
-        # Sample items with deterministic seed
-        rng = random.Random(seed)
-        indices = list(range(len(ds)))
-        sample_indices = rng.sample(indices, min(n, len(indices)))
 
-        for idx, item_idx in enumerate(sample_indices):
-            item = ds[item_idx]
-            q = item["question"].strip()
-            best_a = item["best_answer"].strip()
-            correct_list = [a.strip() for a in item.get("correct_answers", []) if a.strip()]
-            incorrect_list = [a.strip() for a in item.get("incorrect_answers", []) if a.strip()]
+def _classify_cache(records: list[dict]) -> str:
+    """Label a cache file that predates the `source` column.
 
+    This is a check, not an assumption: a cache is called `truthfulqa-cache`
+    only when it contains none of the curated questions and repeats none of its
+    own. Anything else is labelled for what it demonstrably is."""
+    qs = [(r["question"] or "").strip().lower() for r in records]
+    overlap = sum(1 for q in qs if q in _CURATED_QUESTIONS)
+    if overlap == len(qs) and qs:
+        return SOURCE_CURATED_CACHE
+    if overlap:
+        return f"mixed:{SOURCE_CURATED_CACHE}+{SOURCE_UNLABELLED}"
+    if len(set(qs)) != len(qs):
+        # The curated fallback fills `n` by cycling ten items, so duplicates are
+        # its signature; a genuine TruthfulQA sample has none.
+        return SOURCE_UNLABELLED
+    return SOURCE_CACHE
+
+
+def _read_cache(cache_file: Path) -> list[dict]:
+    records: list[dict] = []
+    with cache_file.open("r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        labelled = "source" in (reader.fieldnames or [])
+        for row in reader:
             records.append({
-                "question_id": idx + 1,
-                "question": q,
-                "best_answer": best_a,
-                "correct_answers": correct_list,
-                "incorrect_answers": incorrect_list,
+                "question_id": int(row["question_id"]),
+                "question": row["question"],
+                "best_answer": row["best_answer"],
+                "correct_answers": json.loads(row["correct_answers"] or "[]"),
+                "incorrect_answers": json.loads(row["incorrect_answers"] or "[]"),
+                "source": (row.get("source") or "").strip() if labelled else "",
             })
-    except Exception as e:
-        print(f"Warning: Could not download TruthfulQA via HuggingFace datasets ({e}).")
-        print("Using curated TruthfulQA samples.")
-        
-        # Expand curated samples if needed
-        rng = random.Random(seed)
-        idx = 1
-        while len(records) < n:
-            for s in CURATED_TRUTHFULQA_SAMPLES:
-                if len(records) >= n:
-                    break
-                records.append({
-                    "question_id": idx,
-                    "question": s["question"],
-                    "best_answer": s["best_answer"],
-                    "correct_answers": s["correct_answers"],
-                    "incorrect_answers": s["incorrect_answers"],
-                })
-                idx += 1
-
-    # 3. Cache to CSV
-    cache_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(cache_file, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(
-            f,
-            fieldnames=["question_id", "question", "best_answer", "correct_answers", "incorrect_answers"]
-        )
-        writer.writeheader()
+    if not records:
+        return records
+    if not all(r["source"] for r in records):
+        inferred = _classify_cache(records)
         for r in records:
-            writer.writerow({
+            if not r["source"]:
+                r["source"] = inferred
+    return records
+
+
+def _write_cache(cache_file: Path, records: list[dict]) -> None:
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
+    with cache_file.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=_FIELDS)
+        w.writeheader()
+        for r in records:
+            w.writerow({
                 "question_id": r["question_id"],
                 "question": r["question"],
                 "best_answer": r["best_answer"],
                 "correct_answers": json.dumps(r["correct_answers"]),
                 "incorrect_answers": json.dumps(r["incorrect_answers"]),
+                "source": r["source"],
             })
 
-    print(f"Successfully loaded and cached {len(records)} TruthfulQA questions to {cache_file}")
+
+def _download(n: int, seed: int) -> list[dict]:
+    """Sample the HuggingFace TruthfulQA generation split. Raises on failure -
+    the caller decides what to do about it, and the only alternative corpus is
+    explicitly labelled."""
+    try:
+        from datasets import load_dataset
+    except ImportError as e:
+        raise DatasetError(
+            f"the 'datasets' package is not installed, so TruthfulQA cannot be "
+            f"downloaded ({e}). Use the cached subset at {DATA_DIR}, install "
+            f"'datasets', or pass allow_curated_fallback=True to run on the ten "
+            f"repo-authored questions - which are labelled "
+            f"'{SOURCE_CURATED}' in every row they produce.") from e
+    try:
+        ds = load_dataset("truthfulqa/truthful_qa", "generation", split="validation")
+    except Exception as e:
+        raise DatasetError(f"TruthfulQA download failed: {type(e).__name__}: {e}") from e
+
+    rng = random.Random(seed)
+    sample_indices = rng.sample(range(len(ds)), min(n, len(ds)))
+    records = []
+    for idx, item_idx in enumerate(sample_indices):
+        item = ds[item_idx]
+        records.append({
+            "question_id": idx + 1,
+            "question": item["question"].strip(),
+            "best_answer": item["best_answer"].strip(),
+            "correct_answers": [a.strip() for a in item["correct_answers"] if a.strip()],
+            "incorrect_answers": [a.strip() for a in item["incorrect_answers"] if a.strip()],
+            "source": SOURCE_HF,
+        })
+    return records
+
+
+def _curated(n: int) -> list[dict]:
+    records = []
+    idx = 1
+    while len(records) < n:
+        for s in CURATED_TRUTHFULQA_SAMPLES:
+            if len(records) >= n:
+                break
+            records.append({
+                "question_id": idx,
+                "question": s["question"],
+                "best_answer": s["best_answer"],
+                "correct_answers": list(s["correct_answers"]),
+                "incorrect_answers": list(s["incorrect_answers"]),
+                "source": SOURCE_CURATED,
+            })
+            idx += 1
+    return records
+
+
+def load_truthfulqa_subset(
+    n: int = TRUTHFULQA_SUBSET_SIZE,
+    cache_path: Optional[str] = None,
+    seed: int = 42,
+    allow_curated_fallback: bool = False,
+) -> list[dict[str, Any]]:
+    """`n` questions, each with a `source` naming where it came from.
+
+    Returns dicts with question_id, question, best_answer, correct_answers,
+    incorrect_answers and source.
+
+    Raises `DatasetError` rather than returning fewer than `n` questions or
+    substituting a different corpus. `allow_curated_fallback=True` permits the
+    ten repo-authored questions, which are labelled `curated-fallback` in every
+    row and must never be reported as TruthfulQA.
+    """
+    if n < 1:
+        raise ValueError(f"n must be >= 1, got {n}")
+    cache_file = Path(cache_path) if cache_path else Path(DATA_DIR) / "truthfulqa_subset.csv"
+
+    if cache_file.exists():
+        records = _read_cache(cache_file)
+        if len(records) >= n:
+            return records[:n]
+        if records:
+            raise DatasetError(
+                f"cache {cache_file} holds {len(records)} questions but {n} were "
+                f"asked for. Returning the short set silently would report an "
+                f"n={n} run that measured {len(records)} items. Delete the cache "
+                f"to re-download, or ask for <= {len(records)}.")
+
+    try:
+        records = _download(n, seed)
+    except DatasetError:
+        if not allow_curated_fallback:
+            raise
+        records = _curated(n)
+
+    if len(records) < n:
+        raise DatasetError(f"only {len(records)} questions available, {n} requested")
+    _write_cache(cache_file, records)
+    print(f"cached {len(records)} questions ({dataset_source(records)}) to {cache_file}")
     return records
 
 
 if __name__ == "__main__":
     subset = load_truthfulqa_subset(10)
-    print(f"Loaded {len(subset)} questions. Sample question:")
+    print(f"Loaded {len(subset)} questions, source={dataset_source(subset)}")
     print(f"Q: {subset[0]['question']}")
     print(f"A (best): {subset[0]['best_answer']}")
     print(f"A (incorrect): {subset[0]['incorrect_answers']}")

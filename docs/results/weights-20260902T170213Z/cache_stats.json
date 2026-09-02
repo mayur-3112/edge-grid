@@ -1,0 +1,41 @@
+{
+  "after_cold_pass": {
+    "session": {
+      "hits": 5,
+      "misses": 5,
+      "evictions": 4,
+      "bytes_downloaded": 72417280,
+      "bytes_evicted": 22085632
+    },
+    "lifetime": {
+      "hits": 5,
+      "misses": 5,
+      "evictions": 4,
+      "bytes_downloaded": 72417280,
+      "bytes_evicted": 22085632
+    },
+    "budget_bytes": 51380224,
+    "used_bytes": 50331648,
+    "entries": 1
+  },
+  "final": {
+    "session": {
+      "hits": 7,
+      "misses": 11,
+      "evictions": 9,
+      "bytes_downloaded": 144900096,
+      "bytes_evicted": 94502912
+    },
+    "lifetime": {
+      "hits": 7,
+      "misses": 11,
+      "evictions": 9,
+      "bytes_downloaded": 144900096,
+      "bytes_evicted": 94502912
+    },
+    "budget_bytes": 51380224,
+    "used_bytes": 50397184,
+    "entries": 2
+  },
+  "tampered_cache_kept_bytes": false
+}

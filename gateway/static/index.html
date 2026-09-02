@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Edge Grid — Operator Console</title>
+<link rel="stylesheet" href="/static/styles.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23f6f5f1'/%3E%3Cpath d='M3 8 L8 4 L13 8 L8 12 Z' fill='none' stroke='%231d4e89' stroke-width='1.2'/%3E%3Ccircle cx='3' cy='8' r='1.8' fill='%231d4e89'/%3E%3Ccircle cx='13' cy='8' r='1.8' fill='%231d4e89'/%3E%3Ccircle cx='8' cy='4' r='1.8' fill='%231d4e89'/%3E%3C/svg%3E">
+</head>
+<body>
+<div class="scanlines"></div>
+
+<header class="mast">
+  <div class="mast-title">
+    <span class="mark"></span>
+    <h1>The Edge Grid</h1>
+    <span class="eyebrow">operator console</span>
+  </div>
+  <div class="mast-meta">
+    <span class="chip" id="chip-mode"><span class="dot"></span><span id="mode-text">mode ?</span></span>
+    <span class="chip" id="chip-runtime"><span class="dot"></span><span id="runtime-text">runtime ?</span></span>
+    <span class="chip" id="chip-judge"><span class="dot"></span><span id="judge-text">judge ?</span></span>
+    <span class="chip" id="chip-feed"><span class="dot"></span><span id="feed-text">feed ?</span></span>
+  </div>
+</header>
+
+
+<nav class="nav" id="nav">
+  <a href="#/"             data-nav="overview">Overview</a>
+  <a href="#/nodes"        data-nav="nodes">Nodes<span class="tally" id="nav-nodes">0</span></a>
+  <a href="#/jobs"         data-nav="jobs">Jobs<span class="tally" id="nav-jobs">0</span></a>
+  <a href="#/verification" data-nav="verification">Verification<span class="tally" id="nav-verif">0</span></a>
+  <a href="#/settlement"   data-nav="settlement">Settlement<span class="tally" id="nav-ledger">0</span></a>
+  <a href="#/console"      data-nav="console">Console</a>
+  <a href="#/events"       data-nav="events">Events<span class="tally" id="nav-events">0</span></a>
+</nav>
+
+<div class="banner" id="banner"></div>
+
+<main class="wrap">
+
+<!-- ============================ OVERVIEW ============================ -->
+<div class="page" data-page="overview">
+  <section class="stat-strip" id="stats">
+    <div class="stat"><div class="k">jobs</div><div class="v num" id="s-jobs">&mdash;</div><div class="u" id="s-jobs-sub">no jobs yet</div></div>
+    <div class="stat"><div class="k">ttft mean</div><div class="v num" id="s-ttft">&mdash;</div><div class="u" id="s-ttft-sub">ms, first token</div></div>
+    <div class="stat"><div class="k">throughput</div><div class="v num" id="s-tps">&mdash;</div><div class="u">tok/s, runtime-reported</div></div>
+    <div class="stat"><div class="k">escrowed</div><div class="v num" id="s-grid">&mdash;</div><div class="u" id="s-grid-sub">GRID, second price</div></div>
+    <div class="stat"><div class="k">verified</div><div class="v num" id="s-ver">&mdash;</div><div class="u" id="s-ver-sub">pass / fail / error</div></div>
+    <div class="stat"><div class="k">da height</div><div class="v num" id="s-da">&mdash;</div><div class="u" id="s-da-sub">merkle-committed blocks</div></div>
+  </section>
+
+  <div class="cols">
+    <section class="panel">
+      <header><span class="rule"></span><h2>pipeline</h2>
+        <span class="count">request &rarr; settlement</span></header>
+      <div class="panel-body">
+        <ol class="flow" id="flow">
+          <li><b>auction</b><span>signed job on GossipSub, sealed bids, second price</span></li>
+          <li><b>inference</b><span>winning node streams; TTFT stamped at first token</span></li>
+          <li><b>commitment</b><span>output blob to DA, Merkle root on chain</span></li>
+          <li><b>verification</b><span>5% sampled; blob checked before any judge call</span></li>
+          <li><b>settlement</b><span>escrow released, or stake slashed 80/20</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="panel">
+      <header><span class="rule"></span><h2>latest activity</h2>
+        <a class="count" href="#/events">all events &rarr;</a></header>
+      <div class="log" id="log-mini"></div>
+      <div class="empty" id="log-mini-empty"><b>no events yet</b>waiting on /api/events</div>
+    </section>
+  </div>
+</div>
+
+<!-- ============================== NODES ============================== -->
+<div class="page" data-page="nodes">
+  <section class="panel">
+    <header><span class="rule"></span><h2>node roster</h2>
+      <span class="count" id="nodes-count">0</span></header>
+    <div class="panel-body flush scroll">
+      <table id="nodes-table">
+        <thead><tr>
+          <th>peer</th><th>tier</th><th class="r">stake</th><th class="r">earned</th>
+          <th>warm</th><th class="r">ttft</th><th class="r">px/1k</th>
+          <th class="r">jobs</th><th>health</th>
+        </tr></thead>
+        <tbody id="nodes-body"></tbody>
+      </table>
+      <div class="empty" id="nodes-empty"><b>no nodes</b>the gateway has not reported a roster yet</div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================== JOBS =============================== -->
+<div class="page" data-page="jobs">
+  <section class="panel">
+    <header><span class="rule"></span><h2>job feed</h2>
+      <span class="count" id="jobs-count">0</span></header>
+    <div class="panel-body flush scroll">
+      <table id="jobs-table">
+        <thead><tr>
+          <th>job</th><th>stages</th><th>prompt</th><th class="r">bids</th>
+          <th class="r">price</th><th class="r">ttft</th><th class="r">tok</th>
+          <th>verdict</th><th>escrow</th>
+        </tr></thead>
+        <tbody id="jobs-body"></tbody>
+      </table>
+      <div class="empty" id="jobs-empty"><b>no jobs</b>run one from the Console, or POST /v1/chat/completions</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <header><span class="rule"></span><h2>auction detail</h2>
+      <span class="count" id="auction-job">no job selected</span></header>
+    <div id="auction-body">
+      <div class="empty"><b>no auction selected</b>pick a job above to see its bid ladder and clearing price</div>
+    </div>
+  </section>
+</div>
+
+<!-- ========================== VERIFICATION =========================== -->
+<div class="page" data-page="verification">
+  <section class="panel">
+    <header><span class="rule"></span><h2>verification</h2>
+      <span class="count" id="verify-rate">sample rate &mdash;</span></header>
+    <div class="split">
+      <div><div class="k">pass</div><div class="v p num" id="v-pass">0</div></div>
+      <div><div class="k">fail</div><div class="v f num" id="v-fail">0</div></div>
+      <div><div class="k">error</div><div class="v num" id="v-err">0</div></div>
+    </div>
+    <div class="panel-body flush scroll">
+      <table>
+        <thead><tr><th>job</th><th>verdict</th><th class="r">score</th><th>judge</th><th class="r">da</th></tr></thead>
+        <tbody id="verdicts-body"></tbody>
+      </table>
+      <div class="empty" id="verdicts-empty"><b>no verdicts</b>only sampled jobs are judged; tick &ldquo;force verify&rdquo; in the Console to audit one</div>
+    </div>
+  </section>
+</div>
+
+<!-- =========================== SETTLEMENT ============================ -->
+<div class="page" data-page="settlement">
+  <section class="panel">
+    <header><span class="rule"></span><h2>stake</h2>
+      <span class="count">per provider</span></header>
+    <div id="stakes"></div>
+  </section>
+
+  <section class="panel">
+    <header><span class="rule"></span><h2>ledger</h2>
+      <span class="count" id="ledger-count">0</span></header>
+    <div class="panel-body flush scroll">
+      <table>
+        <thead><tr><th>job</th><th>provider</th><th class="r">amount</th><th class="r">slashed</th><th>state</th></tr></thead>
+        <tbody id="ledger-body"></tbody>
+      </table>
+      <div class="empty" id="ledger-empty"><b>ledger empty</b>no escrow has been released or slashed yet</div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================= CONSOLE ============================= -->
+<div class="page" data-page="console">
+  <section class="panel">
+    <header><span class="rule"></span><h2>console</h2>
+      <span class="count">POST /v1/chat/completions</span></header>
+    <div class="panel-body">
+      <textarea id="prompt" spellcheck="false">Explain in two sentences why time-to-first-token matters more than total latency for an interactive assistant.</textarea>
+      <div class="row" style="margin-top:10px">
+        <label for="model">model</label>
+        <select id="model"><option value="">(loading)</option></select>
+        <label for="maxtok">max</label>
+        <input id="maxtok" class="num" type="number" value="120" min="1" max="2048" style="width:76px">
+        <label class="row" style="gap:5px"><input type="checkbox" id="force" style="width:auto"> <span>force verify</span></label>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <button class="go" id="send">run job &rarr;</button>
+        <button class="ghost" id="clear">clear</button>
+        <span class="dim" id="send-status"></span>
+      </div>
+      <div class="out" id="out"><span class="dim">stream output appears here. tokens arrive over SSE from the winning node.</span></div>
+      <dl class="kv" id="out-meta" style="margin-top:14px"></dl>
+    </div>
+  </section>
+</div>
+
+<!-- ============================== EVENTS ============================= -->
+<div class="page" data-page="events">
+  <section class="panel">
+    <header><span class="rule"></span><h2>event stream</h2>
+      <span class="count" id="events-count">seq 0</span></header>
+    <div class="log" id="log"></div>
+    <div class="empty" id="log-empty"><b>no events</b>waiting on /api/events</div>
+  </section>
+</div>
+
+<p class="footnote" id="footnote"><b>mode note</b> &mdash; waiting for /health.</p>
+
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+# Build context is the repo root, which contains a ~1 GB virtualenv, the git
+# history and node_modules. Sending those to the daemon would dominate the build
+# time and none of it is copied into the image. BuildKit reads this file because
+# it is named "<dockerfile>.dockerignore" and sits beside the Dockerfile, so the
+# repo root needs no .dockerignore of its own.
+.venv/
+venv/
+.git/
+node_modules/
+**/node_modules/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+docs/
+contracts/
+gateway/
+sdk/
+inference/
+verification/
+experiments/
+tests/
+.da/
+.env
+*.log

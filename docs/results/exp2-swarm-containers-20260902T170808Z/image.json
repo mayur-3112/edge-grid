@@ -1,0 +1,5 @@
+{
+  "image": "edgegrid-node:dev",
+  "build_s": 1.0,
+  "image_id": "sha256:0bfa2bf3020530e902692d34afdec84ae98014a6fde137262d1bfffef945b5b5"
+}

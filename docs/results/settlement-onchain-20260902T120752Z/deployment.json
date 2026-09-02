@@ -1,0 +1,31 @@
+{
+  "chainId": 31337,
+  "blockNumber": 6,
+  "contracts": {
+    "NodeRegistry": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+    "Marketplace": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
+    "VerificationContract": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+    "ModelRegistry": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9"
+  },
+  "gasUsed": {
+    "NodeRegistry": 1121822,
+    "Marketplace": 1198543,
+    "VerificationContract": 1641201,
+    "ModelRegistry": 870232
+  },
+  "txHashes": {
+    "NodeRegistry": "0x6ec4f89f51ddf1dcd42a2f5f6976609bd5bdc5f3467a169d63b2d78fcb0f3881",
+    "Marketplace": "0xe9174822132c105467b29769fd7991aae17422f08601f41c5a6bbdb1b12652ba",
+    "VerificationContract": "0x6e6ffbc9de625e319639223dd5d1a41fa1d939b589719300910f011af19aafb0",
+    "ModelRegistry": "0x8d67a55c92a1c6ffdec0b9c8d8586d2235360fcc08542251fc76e8b0b3491a94"
+  },
+  "params": {
+    "minStakeWei": "10000000000000000000",
+    "unbondingPeriodS": 3600,
+    "challengeWindowS": 3600,
+    "awardTimeoutS": 600,
+    "validatorSlashBps": 8000,
+    "bps": 10000
+  },
+  "totalDeploymentGas": 4831798
+}

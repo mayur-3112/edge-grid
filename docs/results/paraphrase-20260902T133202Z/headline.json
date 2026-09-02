@@ -1,0 +1,18 @@
+{
+  "run_id": "paraphrase-20260902T133202Z",
+  "judge_backend": "ollama",
+  "judge_model": "qwen3-vl:2b-instruct",
+  "paraphrase_model": "qwen3-vl:2b-instruct",
+  "answer_source": "reference",
+  "dataset_source": "truthfulqa-cache",
+  "k_requested": 4,
+  "n_questions_measured": 8,
+  "n_judgements": 30,
+  "n_error_judgements": 0,
+  "n_dropped": 4,
+  "verdict_flip_rate": 0.25,
+  "n_flipped": 2,
+  "mean_score_sd": 0.56,
+  "mean_score_range": 1.25,
+  "n_score_range_ge_2": 3
+}

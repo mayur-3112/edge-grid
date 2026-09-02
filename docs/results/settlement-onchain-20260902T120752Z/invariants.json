@@ -1,0 +1,27 @@
+{
+  "backend": "chain",
+  "chain_id": 31337,
+  "block": 21,
+  "params": {
+    "min_stake_wei": 10000000000000000000,
+    "challenge_window_s": 3600,
+    "validator_slash_bps": 8000,
+    "award_timeout_s": 600
+  },
+  "baseline_block": 6,
+  "accounts_checked": 6,
+  "holders_discovered_from_logs": 0,
+  "registry_balance_delta": 20.05,
+  "stake_active_delta": 19.95,
+  "stake_unbonding_delta": 0.0,
+  "registry_credited_delta": 0.1,
+  "marketplace_balance_delta": 0.1,
+  "escrow_held": 0.0,
+  "escrow_held_by_this_instance": 0.0,
+  "marketplace_credited_delta": 0.1,
+  "provider_payout_total": 0.05,
+  "requester_refund_total": 0.1,
+  "slashed_delta": 0.1,
+  "slashed_by_this_instance": 0.1,
+  "n_settlements": 3
+}

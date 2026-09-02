@@ -1,0 +1,36 @@
+{
+  "run_id": "paraphrase-20260902T133202Z",
+  "experiment": "paraphrase",
+  "finished_utc": "2026-09-02T13:37:08.324610+00:00",
+  "elapsed_s": 305.729,
+  "rows": {
+    "paraphrases": 33,
+    "raw": 30,
+    "per_question": 8
+  },
+  "dropped": [
+    {
+      "what": "q6",
+      "why": "no paraphrase survived the lexical guard",
+      "at": 46.19371087700347
+    },
+    {
+      "what": "q10",
+      "why": "no paraphrase survived the lexical guard",
+      "at": 67.65731317200334
+    },
+    {
+      "what": "q6:consistency",
+      "why": "only 1 resolved judgements; cannot measure a flip",
+      "at": 305.7269829800025
+    },
+    {
+      "what": "q10:consistency",
+      "why": "only 1 resolved judgements; cannot measure a flip",
+      "at": 305.72722682400126
+    }
+  ],
+  "n_dropped": 4,
+  "error": null,
+  "status": "ok"
+}

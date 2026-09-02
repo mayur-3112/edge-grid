@@ -1,0 +1,16 @@
+{
+  "run_id": "exp2-swarm-containers-20260902T170808Z",
+  "experiment": "exp2-swarm-containers",
+  "finished_utc": "2026-09-02T17:08:18.754702+00:00",
+  "elapsed_s": 10.234,
+  "rows": {
+    "nodes": 3,
+    "dht_lookups": 6,
+    "auctions": 1,
+    "bids": 2
+  },
+  "dropped": [],
+  "n_dropped": 0,
+  "error": null,
+  "status": "ok"
+}

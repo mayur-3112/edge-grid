@@ -1,0 +1,4 @@
+n_nodes,n_auctions,n_runs,bids,first_bid_ms_mean,first_bid_ms_sd,first_bid_ms_min,first_bid_ms_max,last_bid_ms_mean,last_bid_ms_sd,last_bid_ms_min,last_bid_ms_max,broadcast_to_award_ms_mean,broadcast_to_award_ms_sd,broadcast_to_award_ms_min,broadcast_to_award_ms_max,mesh_ready_ms_mean,mesh_ready_ms_sd,mesh_ready_ms_min,mesh_ready_ms_max
+3,19,7,2,16.9,6.8,7.0,29.0,21.3,9.2,9.0,37.0,2007.6,7.9,2002.0,2039.0,7899.4,1605.7,5547.1,9677.7
+4,19,7,3,22.3,14.1,8.0,63.0,32.6,20.2,11.0,87.0,2007.7,3.9,2003.0,2020.0,8028.0,1695.7,5532.9,10926.9
+5,19,7,4,21.1,9.4,9.0,37.0,36.7,18.8,14.0,78.0,2007.1,3.0,2003.0,2017.0,8154.5,1618.0,5582.5,10323.2
