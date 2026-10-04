@@ -237,10 +237,22 @@ observation.
 
 ## VI. DISCUSSION
 
-The prototype's composition holds together end to end at small scale — every stage executed
-against real cryptography, a real P2P stack, a real streaming runtime, and a real chain — but
-every network measurement shares one physical kernel, three/five node counts cannot establish a
-scaling law, and staked collateral in every run is a test value with nothing real to lose.
+The prototype convincingly shows that the five-stage pipeline of Section III holds together as a
+running system rather than as a set of separately-plausible components: a real signed job travels
+from broadcast, through a real gossip-mesh auction that clears correctly and is individually
+rational on every measured award, through a real streaming inference call whose warm latency
+clears a sub-second target, through a real content-addressed weight fetch a node can verify without
+trusting its source, through a real Merkle-committed data-availability check, to a real on-chain
+escrow that resolves correctly down all three of its state-machine paths and conserves value
+exactly. That composition — not any individual mechanism, all of which are prior art (§II) — is
+what this evaluation is actually able to support at small scale. What it does not show is
+comparably important: every network measurement, including the auction under injected latency, ran
+on one physical kernel; nothing here establishes behavior across real wide-area links, NAT
+traversal, packet loss, or peer churn; three and five node counts cannot establish a scaling law;
+gas figures are priced against no fee market or contention; and staked collateral in every run is a
+test value with no real cost to lose, so no conclusion follows about deterrent adequacy — the
+mechanism's incentive-compatibility argument is a property of its construction, not something
+measured here.
 
 The **central finding** is not a number but a corrected explanation: it would have been easy to
 conclude that a same-family judge inherits the fraud-generating model's blind spots, making
