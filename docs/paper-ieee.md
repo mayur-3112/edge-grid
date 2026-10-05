@@ -6,9 +6,9 @@
 </div>
 <p class="ieee-guide"><em>Guide: Dr. Savita Choudhary, Professor &amp; Head</em></p>
 
-<p class="ieee-abstract"><em>Abstract</em>—Centralized inference services concentrate pricing power, availability, and trust in a single operator, and decentralized physical infrastructure networks have already shown that peer-to-peer markets can sell connectivity, storage, and general compute at scale. Selling verifiable AI inference the same way raises a problem those networks do not solve: an anonymous edge provider, operating under a hard latency budget, has both the means and the incentive to return a plausible-looking wrong answer, and naive redundancy or centralized scheduling cannot detect that cheaply. We design a network in which a job is discovered and auctioned under a sealed-bid, warm-start-aware second-price rule; executed by a streaming edge inference runtime; committed to a Merkle-backed data-availability layer; and verified by a two-tier mechanism that separates a trustless cryptographic fraud proof from a sampled, quorum-voted semantic judge, with staked collateral slashed 80/20 between reporter and treasury on confirmed fraud. We build and measure a small-scale reference implementation on commodity CPU hardware: warm time-to-first-token averaged 610 ms with a 12× cold-start penalty; a sealed-bid auction cleared correctly across 57 trials and responded near-linearly to injected per-link network delay; content-addressed model weights were fetched, independently re-verified, and correctly rejected under three tampering scenarios; and on-chain settlement conserved value exactly across all three resolution paths. The verification layer's measured behavior is the paper's central finding: the deployable, edge-hostable judge configuration caught only 30–35% of two semantically subtle fraud strategies while scoring them confidently rather than hesitantly, and a follow-up experiment shows this failure tracks judge capability rather than the judge's relationship to the model it polices — refuting an explanation this evaluation initially favored.</p>
+<p class="ieee-abstract"><em>Abstract.</em> Centralized inference services concentrate pricing power, availability, and trust in a single operator, and decentralized physical infrastructure networks have already shown that peer-to-peer markets can sell connectivity, storage, and general compute at scale. Selling verifiable AI inference the same way raises a problem those networks do not solve: an anonymous edge provider, operating under a hard latency budget, has both the means and the incentive to return a plausible-looking wrong answer, and naive redundancy or centralized scheduling cannot detect that cheaply. We design a network in which a job is discovered and auctioned under a sealed-bid, warm-start-aware second-price rule; executed by a streaming edge inference runtime; committed to a Merkle-backed data-availability layer; and verified by a two-tier mechanism that separates a trustless cryptographic fraud proof from a sampled, quorum-voted semantic judge, with staked collateral slashed 80/20 between reporter and treasury on confirmed fraud. We build and measure a small-scale reference implementation on commodity CPU hardware: warm time-to-first-token averaged 610 ms with a 12× cold-start penalty; a sealed-bid auction cleared correctly across 57 trials and responded near-linearly to injected per-link network delay; content-addressed model weights were fetched, independently re-verified, and correctly rejected under three tampering scenarios; and on-chain settlement conserved value exactly across all three resolution paths. The verification layer's measured behavior is the paper's central finding: the deployable, edge-hostable judge configuration caught only 30–35% of two semantically subtle fraud strategies while scoring them confidently rather than hesitantly, and a follow-up experiment shows this failure tracks judge capability rather than the judge's relationship to the model it polices, refuting an explanation this evaluation initially favored.</p>
 
-<p class="ieee-keywords"><em>Keywords</em>—decentralized physical infrastructure networks, verifiable AI inference, LLM-as-a-Judge, second-price auctions, optimistic fraud proofs, staked settlement.</p>
+<p class="ieee-keywords"><em>Keywords:</em> decentralized physical infrastructure networks, verifiable AI inference, LLM-as-a-Judge, second-price auctions, optimistic fraud proofs, staked settlement.</p>
 
 ## I. INTRODUCTION
 
@@ -21,20 +21,20 @@ budget, with correctness verified cheaply enough that verification does not eat 
 protects.**
 
 Redundant execution multiplies cost by the redundancy factor for every job, not just the audited
-fraction — economically incompatible with a centralized provider's marginal cost. Centralized
+fraction, which is economically incompatible with a centralized provider's marginal cost. Centralized
 verification reintroduces the single point of control the network exists to remove. Reputation
 punishes a *pattern*, not a specific transaction. What is needed is a mechanism that prices a
 latency budget at routing time, verifies a *sampled* fraction of jobs cheaply, and makes fraud's
-economic consequence automatic — without a central adjudicator. Two properties make this harder
+economic consequence automatic, without a central adjudicator. Two properties make this harder
 than verifying storage: a wrong answer need not look wrong (a fabricated fact or negated claim can
 be fluent and indistinguishable from a correct one), and the party best positioned to catch a
-subtle semantic error is itself a language model — so the verification layer inherits every
+subtle semantic error is itself a language model, so the verification layer inherits every
 reliability question that attaches to language models generally, including that it can be
 confidently wrong. Section 5.4 is a direct measurement of that risk.
 
 We design the network around a strict separation between two kinds of verification claim.
 A **cryptographic fraud proof** establishes with certainty that a provider served output
-inconsistent with what it committed on chain — a fact about two hashes, needing no challenge
+inconsistent with what it committed on chain: a fact about two hashes, needing no challenge
 period. A **semantic verdict** is a judgment call about whether a faithfully-delivered output is
 actually correct, rendered by one or more independent validator models under a quorum rule. This
 lets the cheap, certain tier absorb one entire class of dishonesty for a fixed cost, and confines
@@ -51,11 +51,11 @@ front-running window.
 **Prototype and evaluation contributions:** (1) a working, reproducible reference implementation
 with every figure traceable to a configuration-snapshotted run; (2) measurement that the
 deployable verification configuration is confidently wrong on two of four fraud strategies, and
-that this tracks judge *capability* rather than *lineage* — refuting an explanation we initially
+that this tracks judge *capability* rather than *lineage*, refuting an explanation we initially
 favored; (3) measurement that quorum aggregation reduces false positives well below individual
-members at no cost to recall; (4) identification of a methodological confound — a model-generated
-"honest" control is not reliably honest, and bounds every LLM-as-a-Judge precision figure — that
-recurred in our own pipeline even after being diagnosed once.
+members at no cost to recall; (4) identification of a methodological confound: a model-generated
+"honest" control is not reliably honest and bounds every LLM-as-a-Judge precision figure, a problem
+that recurred in our own pipeline even after being diagnosed once.
 
 ---
 
@@ -68,7 +68,7 @@ inference-specific verification layer; Gensyn [4] targets verifiable ML compute 
 training. None couples a latency-bounded auction to a sampled semantic verification layer with
 staked slashing.
 
-**Morpheus** [5, 6] is the closest architectural precedent — an Arbitrum-L2 marketplace where
+**Morpheus** [5, 6] is the closest architectural precedent: an Arbitrum-L2 marketplace where
 providers bid and contracts match them to serve LLM inference. We differ in mechanism (a
 warm-start-aware second-price auction with hard-constraint eligibility) and in adding a two-tier
 verification layer outside Morpheus's stated scope. DGrid [7] and Parallax [8] describe
@@ -81,7 +81,7 @@ Our data-availability layer implements Celestia's *binding* property [10] agains
 explicitly declining its *availability* guarantee. Settlement's challenge-window structure follows
 the fraud-proof lineage established for rollups [11, 10, 12]. The LLM-as-a-Judge paradigm [13, 14, 15]
 underlies our semantic tier; our contribution is a measured finding that judge *capability*, not
-*lineage* relative to the policed model, determines whether subtle falsehoods are caught (§5.4) —
+*lineage* relative to the policed model, determines whether subtle falsehoods are caught (§5.4),
 qualifying the intuition that same-family judges share blind spots. Petals [16, 17] addresses
 collaborative multi-peer inference, a complementary problem; Navigator [18] addresses decentralized
 *scheduling* alone, without verification or settlement.
@@ -95,24 +95,24 @@ implementation.
 
 ## III. SYSTEM DESIGN
 
-**System model.** Four roles — requesters, providers, validators, and a settlement layer — compose
+**System model.** Four roles (requesters, providers, validators, and a settlement layer) compose
 a five-stage pipeline (discovery, market, inference, verification, settlement) communicating
 through a fixed message contract (Figure 1).
 
 **Threat model.** Cheating providers are split into two trust classes: an output inconsistent with
 what was committed on chain is *provably* dishonest (a hash mismatch, checkable by anyone); an
 output that is faithfully delivered but factually wrong requires a judge, whose error rate is an
-irreducible cost. Colluding provider/validator pairs are mitigated structurally — deterministic,
-unpredictable sampling means a provider cannot know which jobs will be audited — but validator
+irreducible cost. Colluding provider/validator pairs are mitigated structurally: deterministic,
+unpredictable sampling means a provider cannot know which jobs will be audited, but validator
 collusion at scale is **not** claimed solved. Sybil resistance is economic (identity multiplication
 is cheap, but acting under an identity without stake is not) rather than identity-based, and its
 adequacy against a well-resourced adversary is an open question. Latency misreporting is deferred
-to the general verification path rather than a dedicated mechanism — a stated gap.
+to the general verification path rather than a dedicated mechanism, a stated gap.
 
 **Discovery and identity.** One secp256k1 keypair doubles as network identity and settlement
 wallet. A slow-changing **capability record** (models served, tier, stake) propagates through a
 DHT; a fast-changing **liveness signal** (reachability, which models are *loaded and ready*)
-propagates directly between peers — kept separate because collapsing them forces a choice between
+propagates directly between peers, kept separate because collapsing them forces a choice between
 an expensive high-frequency DHT update or a stale signal an auction that clears in seconds cannot
 use.
 
@@ -120,7 +120,7 @@ use.
 want to be paid; the lowest eligible bid wins but is paid the second-lowest eligible price, making
 truthful bidding dominant. Eligibility (tier, latency, price ceiling) is checked as hard
 constraints before any price comparison. A warm-model discount is applied to *ranking score* only,
-never to payment — preserving individual rationality — because over realistic latency budgets, a
+never to payment, preserving individual rationality, because over realistic latency budgets, a
 cold provider's fixed load cost makes warmth closer to an eligibility condition than a tradeable
 quality dimension (confirmed empirically in §5.2).
 
@@ -130,9 +130,9 @@ that cannot report these honestly cannot participate.
 
 **Verification protocol.** Every job is committed to a content-addressed store. A
 deterministic-but-unpredictable sample is audited: first a purely mechanical check (does the
-committed output match the store, under a Merkle proof requiring no model or judgment — a
+committed output match the store, under a Merkle proof requiring no model or judgment: a
 **fraud proof**, treated as certain); only if that passes does one or more validators render a
-semantic verdict, required to be one of three values — pass, fail, or **unavailable** — so a judge
+semantic verdict, required to be one of three values (pass, fail, or **unavailable**), so a judge
 outage is never conflated with either an acquittal or a slash. Validator *diversity* is recorded as
 a first-class property rather than assumed.
 
@@ -175,9 +175,9 @@ reached raises a named exception rather than a plausible-looking default.
 ### A. Latency
 
 Warm time-to-first-token: mean 609.6 ms, median 587.9 ms, p95 723.6 ms (n=20; **all 20 under one
-second**). Cold TTFT averaged 7,963.8 ms against a paired warm 653.7 ms — a **12.18×** ratio,
-attributable almost entirely to model *load* time (7,418 ms cold vs. 568 ms warm), not generation
-— the direct empirical justification for pricing warmth near eligibility rather than as a smooth
+second**). Cold TTFT averaged 7,963.8 ms against a paired warm 653.7 ms, a **12.18×** ratio,
+attributable almost entirely to model *load* time (7,418 ms cold vs. 568 ms warm), not generation,
+the direct empirical justification for pricing warmth near eligibility rather than as a smooth
 quality signal.
 
 ![Figure 1. Time to first token, warm versus cold start.](docs/figures/fig_ttft.png)
@@ -190,17 +190,17 @@ Fifty-seven single-machine auctions (3/4/5 nodes) cleared with zero failures; br
 was pinned at ~2,008 ms by the fixed bid window (not a scaling signal), while un-pinned bid-arrival
 times carried the real signal: last-bid latency rose from 21.3→32.6→36.7 ms. Under container
 network namespaces with injected one-way link delay (0/10/25/50 ms), first-bid arrival rose
-6.0→44.5→71.0→114.0 ms, close to but above a bare round-trip reference line — roughly **2.06 ms of
+6.0→44.5→71.0→114.0 ms, close to but above a bare round-trip reference line, roughly **2.06 ms of
 added delay per ms injected**, consistent with GossipSub relaying through a third peer on some
 messages.
 
 ### C. Verification Accuracy
 
 100 trials (80 fraudulent across four corruption strategies, 20 honest) against TruthfulQA. The
-judge failed **none** of 20 honest answers (100% precision, 0% FPR) — a corrected result: an
+judge failed **none** of 20 honest answers (100% precision, 0% FPR), a corrected result: an
 earlier run had shown a 75% false-positive rate, since diagnosed as a fault in the honest-answer
 *generator*, not the judge. **Overall recall was 65%, sharply bimodal**: 100%/95% on
-off-topic/fabricated-entity fraud, versus **35%/30%** on plausible-substitution/negation fraud —
+off-topic/fabricated-entity fraud, versus **35%/30%** on plausible-substitution/negation fraud,
 scored *confidently* (3.80–4.05/5 against a threshold of 3), not near-threshold, ruling out
 "raise the threshold" as a fix.
 
@@ -210,9 +210,9 @@ scored *confidently* (3.80–4.05/5 against a threshold of 3), not near-threshol
 
 **Capability, not lineage.** Re-judging the same 80 strings with larger hosted models: a
 ~13×-larger *same-family* judge recovered negation recall to 100% (98% overall); an *unrelated*
-family reached 100%/90% (96% overall) — refuting our own initial hypothesis that lineage, not
+family reached 100%/90% (96% overall), refuting our own initial hypothesis that lineage, not
 capability, explained the gap. Under majority-vote quorum across all four panel members, recall
-reached 97% at a **7%** false-positive rate versus 26%/16% for individual complete members —
+reached 97% at a **7%** false-positive rate versus 26%/16% for individual complete members,
 direct support for quorum aggregation, qualified by two of four members being rate-limited into
 near-uselessness. Judge self-consistency under paraphrase (small judge, 8 questions): a **25%**
 verdict-flip rate on reworded claims.
@@ -224,13 +224,13 @@ verdict-flip rate on reworded claims.
 ### D. Weight Distribution and Cost
 
 Five artefacts (64 KiB–48 MiB) via a real IPFS daemon: cold fetch 6.6–317.5 ms, warm (cached)
-under ~1.5 ms — speedups of **12.3×–895.8×** — with the content identifier independently
+under ~1.5 ms, speedups of **12.3×–895.8×**, with the content identifier independently
 recomputed on every fetch and three tampering scenarios correctly rejected against one honest
 control accepted. Three on-chain settlements (honest-release, fraud-proof-slash,
 verdict-slash) all resolved correctly with an exact 80/20 split and exact value conservation; gas
-ranged 32,317 (withdrawal) to 221,353 (the trustless fraud-proof — the best value in the system,
+ranged 32,317 (withdrawal) to 221,353 (the trustless fraud-proof, the best value in the system,
 since it requires no model). Composed cost: **$0.00115** per 1,000 tokens (verification 4.8% of
-that) against a **$0.002** centralized baseline — a notional-rate cost *model*, not a market
+that) against a **$0.002** centralized baseline, a notional-rate cost *model*, not a market
 observation.
 
 ---
@@ -244,19 +244,19 @@ rational on every measured award, through a real streaming inference call whose 
 clears a sub-second target, through a real content-addressed weight fetch a node can verify without
 trusting its source, through a real Merkle-committed data-availability check, to a real on-chain
 escrow that resolves correctly down all three of its state-machine paths and conserves value
-exactly. That composition — not any individual mechanism, all of which are prior art (§II) — is
+exactly. That composition, not any individual mechanism (all of which are prior art, §II), is
 what this evaluation is actually able to support at small scale. What it does not show is
 comparably important: every network measurement, including the auction under injected latency, ran
 on one physical kernel; nothing here establishes behavior across real wide-area links, NAT
 traversal, packet loss, or peer churn; three and five node counts cannot establish a scaling law;
 gas figures are priced against no fee market or contention; and staked collateral in every run is a
-test value with no real cost to lose, so no conclusion follows about deterrent adequacy — the
+test value with no real cost to lose, so no conclusion follows about deterrent adequacy: the
 mechanism's incentive-compatibility argument is a property of its construction, not something
 measured here.
 
 The **central finding** is not a number but a corrected explanation: it would have been easy to
 conclude that a same-family judge inherits the fraud-generating model's blind spots, making
-diversity the fix. The panel experiment refutes this — capability, not lineage, closed the gap. A
+diversity the fix. The panel experiment refutes this: capability, not lineage, closed the gap. A
 second, general finding travels alongside it: **every false-positive rate in this evaluation is
 confounded by the fallibility of whichever model generated the "honest" control**, a milder
 recurrence of the exact failure that produced the earlier 75%-false-positive result. Judge
@@ -269,18 +269,18 @@ tuning parameter.
 
 ## VII. CONCLUSION AND FUTURE WORK
 
-Five mechanisms studied separately in prior literature — P2P discovery, an auction market,
-streaming edge inference, two-tier verification, and staked settlement — compose into one
+Five mechanisms studied separately in prior literature (P2P discovery, an auction market,
+streaming edge inference, two-tier verification, and staked settlement) compose into one
 measured, end-to-end pipeline. The prototype's most useful result is a refuted hypothesis: the
 verification layer's failure on adversary-favored fraud tracks judge capability, not lineage,
 correcting our own initial explanation rather than confirming it.
 
-**Future work**, each tied to a named limitation: (1) a genuine multi-machine deployment — the
+**Future work**, each tied to a named limitation: (1) a genuine multi-machine deployment, the
 largest unaddressed threat, since every network measurement here shares one kernel; (2) a
 capability-adequate, *edge-hostable* judge, since the configuration that closes the recall gap is
 not deployable on the hardware tier this network targets; (3) a human-adjudicated honest control
 set, the precondition for any clean judge-precision measurement; (4) the production substitutions
-of Table I — Celestia, a real rollup, GPU-accelerated serving, a public IPFS swarm; (5) an adaptive
+of Table I (Celestia, a real rollup, GPU-accelerated serving, a public IPFS swarm); (5) an adaptive
 adversary that reallocates toward undetected fraud strategies; (6) zero-knowledge verification of
 model execution, which would make judge capability moot but remains orders of magnitude too
 expensive for a sub-second latency target today.

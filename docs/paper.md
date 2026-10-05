@@ -34,7 +34,7 @@ explanation this evaluation initially favored. We report the composed pipeline, 
 numbers, and this refuted hypothesis as a bounded but reproducible characterization of what such
 a system achieves today and what a production deployment still requires.
 
-**Index Terms** — decentralized physical infrastructure networks, verifiable AI inference,
+**Index Terms:** decentralized physical infrastructure networks, verifiable AI inference,
 LLM-as-a-Judge, second-price auctions, optimistic fraud proofs, data availability, staked
 settlement.
 
@@ -58,8 +58,8 @@ enough that verification does not eat the economics it is supposed to protect.**
 ### 1.2 The Technical Gap
 
 The naive answers to "how do you know an untrusted provider's output was correct" do not survive
-contact with this problem. Redundant execution — running every job on several providers and
-comparing outputs — multiplies cost by the redundancy factor for every job, not just the
+contact with this problem. Redundant execution (running every job on several providers and
+comparing outputs) multiplies cost by the redundancy factor for every job, not just the
 audited fraction, which is economically incompatible with competing against a centralized
 provider's marginal cost. Centralized scheduling and verification reintroduce the single point of
 control the network exists to remove. And a purely reputation-based system provides no recourse
@@ -74,7 +74,7 @@ Two properties of AI inference specifically make this harder than verifying, say
 provider is still holding the bytes it was paid to hold. First, a wrong answer is not obviously
 wrong: a fabricated fact, a plausible-but-incorrect substitution, or a subtly negated claim can be
 fluent, well-formed, and indistinguishable from a correct answer to anyone who does not already
-know the answer — which is a structurally different verification problem from a checksum
+know the answer, which is a structurally different verification problem from a checksum
 mismatch. Second, the party best positioned to catch a subtle semantic error is itself a language
 model, which means the verification layer inherits every reliability question that attaches to
 language models generally: it can be wrong, it can be wrong *confidently*, and its errors may not
@@ -86,7 +86,7 @@ be independent of the errors of the model it is checking. This paper's central e
 An adversary in this network is a rational economic actor, not an omnipotent one: it can operate
 many identities, misreport its own latency or capability, collude with a validator it also
 controls, or simply return a wrong answer and hope the sampled audit misses it. The system's
-defenses are calibrated to that actor rather than to an unbounded one — staking makes identity
+defenses are calibrated to that actor rather than to an unbounded one: staking makes identity
 multiplication costly rather than impossible, a cryptographic fraud proof makes one class of
 dishonesty provable with certainty rather than merely likely, and a sampled, quorum-voted semantic
 check makes another class of dishonesty *probabilistically* costly to attempt. Section 3.2 states
@@ -97,7 +97,7 @@ this threat model in full, including what it explicitly does not claim to solve.
 We design the network around a strict separation between two kinds of verification claim that
 existing decentralized-compute systems tend to blur together. A **cryptographic fraud proof**
 establishes, with certainty and without trusting any party, that a provider served output
-inconsistent with what it committed on chain — this is a fact about two hashes, not an opinion,
+inconsistent with what it committed on chain: this is a fact about two hashes, not an opinion,
 and it needs no challenge period once proven. A **semantic verdict**, by contrast, is a judgment
 call about whether a faithfully-delivered output is actually correct, and it is inherently
 probabilistic: it is rendered by one or more independent validator models under a quorum rule,
@@ -112,9 +112,9 @@ the class of dishonesty that genuinely requires judgment.
 **Design contributions.**
 
 - We design a market protocol combining a sealed-bid second-price auction with a warm-start
-  handicap applied to ranking score but never to payment, so that model residency — which this
+  handicap applied to ranking score but never to payment, so that model residency, which this
   paper measures to be a near-eligibility condition rather than a smoothly tradeable quality
-  dimension under realistic latency budgets (Section 5.2) — can be priced without breaking the
+  dimension under realistic latency budgets (Section 5.2), can be priced without breaking the
   individual-rationality property that makes truthful bidding dominant (Section 3.4).
 - We design a two-tier verification protocol that structurally separates a trustless
   cryptographic fraud proof from a sampled, quorum-voted, judge-capability-sensitive semantic
@@ -130,7 +130,7 @@ the class of dishonesty that genuinely requires judgment.
   commodity CPU hardware, with every reported figure traceable to a timestamped, configuration-
   snapshotted run directory (Sections 4–5).
 - We measure that the deployable verification configuration is confidently, not hesitantly, wrong
-  on two of four fraud strategies — and we measure, in a dedicated follow-up experiment, that
+  on two of four fraud strategies, and we measure, in a dedicated follow-up experiment, that
   this failure tracks judge *capability* rather than the judge's *lineage* relative to the model
   it polices, refuting an explanation this evaluation initially favored and reporting that
   refutation rather than quietly revising it away (Section 5.4, Section 6.2).
@@ -138,9 +138,9 @@ the class of dishonesty that genuinely requires judgment.
   below that of its individual complete members at no measured cost to recall, providing direct
   empirical support for a design choice this paper's own architecture specifies but does not, on
   its own, prove necessary (Section 5.4).
-- We identify and quantify a methodological confound — that a model-generated "honest" control
+- We identify and quantify a methodological confound: a model-generated "honest" control
   answer is not reliably honest, and bounds every precision figure any LLM-as-a-Judge evaluation
-  reports — that we show recurred in this evaluation's own pipeline even after being diagnosed
+  reports. We show this confound recurred in this evaluation's own pipeline even after being diagnosed
   once (Section 6.2), and that we expect generalizes beyond this system.
 
 The remainder of this paper proceeds as follows: Section 2 positions this work against DePIN,
@@ -154,7 +154,7 @@ evaluation; Section 6 discusses what the results do and do not support; Section 
 
 *(Numbered 2 to match final assembly order; drafted after Sections 3–5 per the workflow's
 literature-last-among-code-sections rule. Citations below use the corrected, independently
-re-verified bibliography of `docs/REFERENCES.md` — not the original Phase-1 reference list, which
+re-verified bibliography of `docs/REFERENCES.md`, not the original Phase-1 reference list, which
 that document's own audit found materially wrong or fabricated in fourteen of twenty entries.
 Reference numbers below match `docs/REFERENCES.md`'s numbering.)*
 
@@ -166,15 +166,15 @@ auction general-purpose compute without an inference-specific verification layer
 targets verifiable machine-learning compute broadly, with a cost model oriented toward training
 rather than low-latency interactive inference. None of these couples a latency-bounded scheduling
 auction to an inference-specific, sampled semantic verification layer with staked slashing the
-way this work's design does — the closest is addressed next.
+way this work's design does; the closest is addressed next.
 
 **Auction-based and market-settled inference.** Morpheus [21, 22] is the most direct architectural
 precedent: an Arbitrum-L2-settled marketplace in which compute providers bid and smart contracts
-match them to serve LLM inference — precisely the combination of provider bidding and rollup
+match them to serve LLM inference, precisely the combination of provider bidding and rollup
 settlement this project also adopts. This work differs in mechanism (a sealed-bid, warm-start-
 aware second-price auction with explicit hard-constraint eligibility, versus Morpheus's own
-matching rule) and in adding a two-tier verification layer — a trustless data-mismatch fraud
-proof beneath a sampled, quorum-voted semantic judge — that is outside Morpheus's stated scope.
+matching rule) and in adding a two-tier verification layer (a trustless data-mismatch fraud
+proof beneath a sampled, quorum-voted semantic judge) that is outside Morpheus's stated scope.
 DGrid [12] and Parallax [14] describe decentralized inference serving without the auction or
 verification layers evaluated here; DGrid is a non-peer-reviewed corporate litepaper and Parallax
 an unrefereed preprint, and any comparison to either is accordingly labeled as a vendor- or
@@ -185,8 +185,8 @@ work's market protocol builds on is classical; what is less standard is applying
 *procurement* auction under a hard latency constraint, with a warm-start handicap applied to
 ranking score but never to payment, specifically to preserve individual rationality while still
 expressing "this provider cannot serve within budget" as an eligibility condition rather than a
-price signal (§3.4). PolyLink [16] — a peer-reviewed blockchain-based decentralized edge AI
-platform for LLM inference — is the closest refereed academic parallel for the settlement side of
+price signal (§3.4). PolyLink [16], a peer-reviewed blockchain-based decentralized edge AI
+platform for LLM inference, is the closest refereed academic parallel for the settlement side of
 this combination; it does not evaluate an auction's response to injected network latency the way
 this work's container experiment does (§5.3).
 
@@ -197,28 +197,28 @@ under a decentralized, sampling validator set [4b] (§4.2, Table 4.1). Settlemen
 challenge-window structure follows the general fraud-proof lineage established for rollups [3, 4b,
 20]: a claim stands unless someone proves it wrong within a fixed window, with the proof itself
 either a cryptographic certainty (the Merkle mismatch path) or a staked oracle's assertion (the
-judge-verdict path) — kept structurally distinct in this design (§3.6) rather than presented as
+judge-verdict path), kept structurally distinct in this design (§3.6) rather than presented as
 one undifferentiated "verification."
 
 **Proof of useful work and verifiable computation.** The broader premise that idle compute can be
 monetized through provably useful work, rather than wasted hashing, has real theoretical grounding
-[5a, 5b] and a formal treatment of proving that a specific computation was performed [5c] — the
+[5a, 5b] and a formal treatment of proving that a specific computation was performed [5c]. This is the
 closest genuine antecedent to this design's Agentic Verification tier, though that formal work
 concerns proof of *training*, not inference, and the judge-based semantic tier evaluated here
 remains a probabilistic, not a cryptographic, check. Zero-knowledge proof of correct model
-execution — which would make the semantic judge's capability limitations (§5.4) structurally
-moot, since a proof system holds no opinions — is architecturally compatible with the fraud-proof
+execution, which would make the semantic judge's capability limitations (§5.4) structurally
+moot since a proof system holds no opinions, is architecturally compatible with the fraud-proof
 interface this design already exposes, but proving transformer inference remains several orders
 of magnitude more expensive than the inference itself and is not evaluated here (§7.2).
 
 **LLM-as-a-Judge and verifiable AI evaluation.** The LLM-as-a-Judge paradigm this design's
 semantic verification tier relies on is itself an active research area [8], evaluated on general
 chatbot preference [8, 11] and, closer to this work's use case, on models' tendency to reproduce
-human misconceptions [9] — the TruthfulQA benchmark this evaluation's fraud-injection corpus is
+human misconceptions [9], the TruthfulQA benchmark this evaluation's fraud-injection corpus is
 built from. This work's contribution to that literature is narrower and empirical: a measured
 finding that judge *capability*, not model *lineage* relative to the model being policed,
 determines whether semantically subtle (negated or plausibly-substituted) falsehoods are caught
-(§5.4), which qualifies rather than confirms the intuition — plausible on its face — that
+(§5.4), which qualifies rather than confirms the intuition (plausible on its face) that
 same-family judges share blind spots with the models they police.
 
 **Decentralized and distributed LLM inference systems.** Petals [10, 10b] and systems in the same
@@ -253,8 +253,8 @@ roles, and a single peer may occupy more than one of them simultaneously:
   prompt and a model identifier), a price ceiling, and a latency budget, and receives back a
   signed output together with a receipt that a third party can later audit.
 - **Providers** execute inference jobs on their own hardware and are paid for doing so. A
-  provider advertises the models it can serve, its current capacity, and — when it holds a
-  model already resident and ready to execute — that fact specifically, because readiness
+  provider advertises the models it can serve, its current capacity, and, when it holds a
+  model already resident and ready to execute, that fact specifically, because readiness
   carries real value to a latency-sensitive requester.
 - **Validators** independently re-examine a sampled fraction of completed jobs and rule on
   whether the delivered output was faithful to what the provider actually produced, and,
@@ -262,13 +262,13 @@ roles, and a single peer may occupy more than one of them simultaneously:
   objective, checkable fact or a matter of judgment, and the design keeps those two kinds of
   ruling structurally distinct rather than blending them into one opaque verdict (§3.6).
 - **The settlement layer** holds every provider's collateral, escrows every job's payment, and
-  releases or confiscates that escrow according to rules that no single party — including the
-  operator of the network, if there is one — can unilaterally override.
+  releases or confiscates that escrow according to rules that no single party, including the
+  operator of the network if there is one, can unilaterally override.
 
 No peer is privileged. Any peer may act as requester, provider, or validator for a given job,
 subject only to holding sufficient stake where staking is a precondition (§3.7). The network's
-job lifecycle is a five-stage pipeline — discovery, market, inference, verification,
-settlement — and each stage communicates with its neighbors through a fixed, versioned message
+job lifecycle is a five-stage pipeline (discovery, market, inference, verification,
+settlement) and each stage communicates with its neighbors through a fixed, versioned message
 contract (Figure 1). Fixing that contract is a design decision in its own
 right: a track that produces or consumes one stage of the pipeline can be built, changed, and
 tested independently of every other track, because the only thing tracks share is the shape of
@@ -289,7 +289,7 @@ one job through the full pipeline, from broadcast to settlement.
 
 We ground the threat model in what the settlement mechanism can and cannot detect, rather than
 in an abstract taxonomy, because a threat the mechanism cannot act on is not a threat the design
-addresses — it is a limitation to be stated plainly in evaluation, not a case to claim coverage
+addresses; it is a limitation to be stated plainly in evaluation, not a case to claim coverage
 of here.
 
 **Cheating providers.** A provider may return a low-quality, truncated, hallucinated, or
@@ -297,7 +297,7 @@ otherwise unfaithful output while claiming payment for correct work. The design 
 directly: a sampled fraction of jobs are independently re-scored (§3.6), and a confirmed
 fraudulent output costs the provider a share of its staked collateral (§3.7). We distinguish two
 sub-cases with different trust requirements. A provider that reports an output different from
-the one it actually committed to the network is *provably* dishonest — the mismatch is a fact
+the one it actually committed to the network is *provably* dishonest: the mismatch is a fact
 about two hashes, checkable by anyone, and requires trusting no party. A provider that reports
 the output it actually produced, but that output is factually wrong or unfaithful to the prompt,
 is dishonest in a way that only a competent judge can detect, and that judgment carries the
@@ -310,7 +310,7 @@ sampling rule (§3.6) means a provider cannot know in advance which of its jobs 
 which limits the value of corrupting a specific validator to corrupting validators broadly; and
 a validator's own stake and the requirement that a quorum, not a single validator, confirm a
 verdict are both direct mitigations, discussed further as a targeted rather than achieved
-property in §3.8. The design does **not** claim to solve validator collusion at scale — that is
+property in §3.8. The design does **not** claim to solve validator collusion at scale; that is
 an open question about validator selection and reputation that this design's staking mechanism
 alone does not close, and it is stated as such rather than assumed away.
 
@@ -319,8 +319,8 @@ discovery, flood the bid pool, or manufacture apparent competition in an auction
 controls entirely. Binding every network identity to a cryptographic keypair that also serves as
 a wallet address (§3.3) does not prevent an adversary from generating many keypairs cheaply; what
 it prevents is that adversary acting under any identity without also being able to stake and be
-slashed under that identity. Sybil resistance in this design is therefore economic — the cost of
-mounting an attack scales with the stake an attacker is willing to put at risk — rather than
+slashed under that identity. Sybil resistance in this design is therefore economic (the cost of
+mounting an attack scales with the stake an attacker is willing to put at risk) rather than
 identity-based, and its adequacy against a well-resourced adversary is an open question the
 design does not resolve.
 
@@ -328,7 +328,7 @@ design does not resolve.
 cannot actually serve within budget, or a requester could manipulate the timing of its own
 auction to disadvantage specific bidders. The market protocol (§3.4) treats a latency claim as a
 hard eligibility constraint rather than a soft preference, and settlement does not depend on the
-claim being honest in the way that price does — a provider that wins on a false latency claim and
+claim being honest in the way that price does. A provider that wins on a false latency claim and
 then fails to deliver within budget is a case the design defers to the general verification path
 rather than solving with a separate latency-specific mechanism, and we flag this as a gap rather
 than claim otherwise.
@@ -339,17 +339,17 @@ We design node identity around a single cryptographic keypair per participant, s
 signature verifies three things at once: the peer's identity on the discovery network, the
 wallet address that holds its stake and receives its payments, and the authenticity of every
 message the peer sends. Binding these three together removes an entire class of impersonation
-attack — a validator cannot rule on a job under one identity while collecting a reward under
+attack: a validator cannot rule on a job under one identity while collecting a reward under
 another, and a provider's discovery-layer advertisement cannot be forged by a peer that does not
 hold the corresponding private key.
 
 Node capability is advertised through two channels that we deliberately keep separate, because
-they change at different rates and serve different consumers. A **capability record** — which
-models a node serves, its hardware tier, its stake, its network address — changes rarely and is
+they change at different rates and serve different consumers. A **capability record** (which
+models a node serves, its hardware tier, its stake, its network address) changes rarely and is
 propagated through a distributed hash table: expensive to update, but durable and queryable by
-any peer that needs to find a provider for a given model. A **liveness signal** — whether a peer
+any peer that needs to find a provider for a given model. A **liveness signal** (whether a peer
 is currently reachable, and critically, which of its models are currently loaded and ready
-rather than merely installed — changes on the order of seconds and is propagated directly between
+rather than merely installed) changes on the order of seconds and is propagated directly between
 neighboring peers rather than through the distributed store. Collapsing these two into one
 channel would force a choice between an expensive, high-frequency update to a durable store or a
 liveness signal too stale to be useful to an auction that clears in seconds; keeping them
@@ -371,7 +371,7 @@ Eligibility is evaluated as a set of hard constraints before any price compariso
 fails to meet the job's minimum hardware tier, that claims a latency above the requester's
 budget, or that exceeds the price ceiling is not a *worse* bid, it is not a bid at all, and it is
 excluded with a named reason rather than merely losing on price. Among eligible bids, the winner
-is the one offering the lowest price, and — the defining property of a second-price mechanism —
+is the one offering the lowest price, and, the defining property of a second-price mechanism,
 the winner is paid not its own bid but the price of the second-lowest eligible bid. This
 decouples what a bid decides (whether a provider wins) from what a bid determines (nothing,
 about the provider's own payment), which is what makes truthful bidding of one's actual reserve
@@ -390,7 +390,7 @@ difference will route latency-sensitive requests to providers that cannot actual
 time. Applying the discount to score but never to payment preserves the individual-rationality
 property that makes the mechanism trustworthy in the first place: a winning provider is always
 paid at least what it bid, so no provider is ever incentivized to walk away from a job it won.
-With a single eligible bidder — no runner-up to set a second price against — the requester's own
+With a single eligible bidder, and so no runner-up to set a second price against, the requester's own
 declared price ceiling stands in as the clearing price, which is the natural extension of the
 reserve-price convention rather than a special case bolted on.
 
@@ -400,8 +400,8 @@ We design the inference stage as a narrow contract between the market layer and 
 capable of streaming generated tokens and reporting, per request, the true wall-clock time to the
 first generated token, the number of tokens actually produced by the model's own tokenizer, and
 whether the model was already loaded at the moment the request arrived. Nothing about the market
-or verification layers depends on which runtime satisfies this contract, or on how it is deployed
-— the contract is deliberately runtime-agnostic, because the property the rest of the system
+or verification layers depends on which runtime satisfies this contract, or on how it is deployed.
+The contract is deliberately runtime-agnostic, because the property the rest of the system
 relies on is that time-to-first-token is *measurable at all*, which requires only that generation
 be observed as a stream rather than awaited as a single completed response. A provider that
 cannot report a genuine token-level count, or cannot distinguish a cold load from a warm one,
@@ -422,8 +422,8 @@ from a model's subjective judgment.
 Every completed job is committed to an append-only, content-addressed store before it is
 eligible for payment: the provider's output is bound to a cryptographic commitment that any
 verifier can later check against the delivered bytes without trusting the store that holds them.
-A fraction of committed jobs, selected by a rule that is deterministic — reproducible by any
-auditor who holds the sampling key — and unpredictable to the provider being audited, is pulled
+A fraction of committed jobs, selected by a rule that is deterministic (reproducible by any
+auditor who holds the sampling key) and unpredictable to the provider being audited, is pulled
 for verification. The first check run against a sampled job is purely mechanical: does the
 committed output actually match what is retrievable from the store, under a cryptographic proof
 that requires no runtime, no model, and no judgment call? A mismatch here is a **fraud proof**,
@@ -431,11 +431,11 @@ not an opinion, and the design treats it as certain: it needs no further corrobo
 challenge window before it can be acted on.
 
 Only a job that survives this mechanical check proceeds to the second tier, where one or more
-independent validator agents judge the semantic quality of the output — whether it is faithful
+independent validator agents judge the semantic quality of the output, whether it is faithful
 to the prompt and, where applicable, factually accurate. Because this tier is inherently a
 matter of judgment rather than proof, the design requires that a validator's ruling be one of
 three values, never two: an output passes, an output fails, or a validator's ruling is
-unavailable — because the model it depends on could not be reached, returned no usable
+unavailable, because the model it depends on could not be reached, returned no usable
 judgment, or the pool of validators failed to reach whatever quorum is required. Collapsing
 "unavailable" into either pass or fail is a design failure the mechanism is built to avoid in
 both directions: reading it as pass would let an adversary win by making a validator
@@ -452,13 +452,13 @@ We design settlement as an escrow whose state transitions are fixed and whose co
 authority for any given job is narrow, so that neither a requester nor a provider can
 unilaterally alter the outcome of a job it is a party to. A requester's payment is locked in
 escrow at the moment a job is awarded, against a provider that must hold active collateral
-before it can be awarded work at all — collateral that exists specifically so a confirmed act of
+before it can be awarded work at all, collateral that exists specifically so a confirmed act of
 fraud has something real to confiscate. Once the provider commits its output, a fixed challenge
 window opens during which the commitment may be contested; if the window closes uncontested, the
 escrow releases to the provider through a step that requires no privileged party to remain
 online, because an honest outcome that depends on someone staying available is not a trustless
-outcome. If the window closes on a confirmed fraud — either the mechanical fraud proof of §3.6 or
-a validator's FAIL ruling — the escrow instead returns to the requester, and a portion of the
+outcome. If the window closes on a confirmed fraud, either the mechanical fraud proof of §3.6 or
+a validator's FAIL ruling, the escrow instead returns to the requester, and a portion of the
 provider's collateral is confiscated and split between the party that surfaced the fraud and a
 shared treasury, so that reporting fraud carries a direct economic reward rather than relying on
 altruism.
@@ -467,7 +467,7 @@ Collateral that a provider attempts to withdraw does not become safe from confis
 withdrawal is requested: we design an unbonding delay during which withdrawn stake remains
 slashable, specifically to close the possibility that a provider who anticipates a challenge
 could simply withdraw its collateral ahead of it. A slash that exceeds a provider's currently
-available collateral is reported as such rather than silently capped and forgotten — an
+available collateral is reported as such rather than silently capped and forgotten: an
 under-collateralized provider is a fact the design surfaces, not one it launders into an
 apparently complete recovery.
 
@@ -481,19 +481,19 @@ apparently complete recovery.
 The design targets, rather than proves, the following properties, and we are explicit about
 which of them the architecture *enforces structurally* versus merely *incentivizes*:
 
-- **Truthful bidding is the dominant strategy** for a provider in the market mechanism of §3.4 —
-  this follows directly from the second-price rule and is a property of the mechanism's
+- **Truthful bidding is the dominant strategy** for a provider in the market mechanism of §3.4.
+  This follows directly from the second-price rule and is a property of the mechanism's
   construction, not an empirical claim requiring measurement.
-- **No value is created or destroyed by settlement** — every unit that enters escrow is
+- **No value is created or destroyed by settlement.** Every unit that enters escrow is
   accounted for on exactly one of the outcomes the state machine of §3.7 permits. This is a
   structural invariant the implementation is required to check on every run (§4), not merely an
   aspiration.
 - **A cryptographically confirmed fraud is acted on with certainty and without a subjective
   judgment call**, while a judgment-based fraud finding is acted on only through the quorum and
-  challenge-window process of §3.6–§3.7 — this is a structural separation the design enforces by
+  challenge-window process of §3.6–§3.7. This is a structural separation the design enforces by
   construction.
 - **Honest providers are rarely slashed, and fraud is detected with probability related to the
-  audit sampling rate** — these are targeted properties, not proven ones. The distinction between
+  audit sampling rate.** These are targeted properties, not proven ones. The distinction between
   a fraud proof (certain) and a validator verdict (a judgment call with an irreducible error
   rate) means the second half of this property is only as strong as the underlying judge, which
   is an empirical question the design does not resolve by construction and which Evaluation
@@ -515,7 +515,7 @@ gossip-based publish/subscribe mesh (py-libp2p), with node identity carried by a
 keypair that doubles as an Ethereum-style wallet address. The inference stage is a thin
 streaming HTTP client against a locally-hosted open-weight model runtime (Ollama), chosen
 because it is the one runtime on the development hardware that exposes a token-level streaming
-API and per-request timing counters — the two properties the design's inference contract (§3.5)
+API and per-request timing counters, the two properties the design's inference contract (§3.5)
 actually depends on; nothing about the design requires this specific runtime, and the client
 library is small enough that a different runtime satisfying the same streaming contract is a
 drop-in replacement. Verification runs the same or a different model through the same client,
@@ -540,14 +540,14 @@ by reimplementing the two functions the interface actually exposes, never by rew
 system around it. Table 4.1 states this plainly, component by component, rather than leaving it
 implicit.
 
-**Table 1 — Design versus prototype: substitutions, production targets, and open limitations**
+**Table 1. Design versus prototype: substitutions, production targets, and open limitations**
 
 | Component | Prototype instantiation | Intended production target | Limitation left open |
 |---|---|---|---|
 | Settlement chain | Solidity contracts on a local, single-node Ethereum-compatible development chain | An Arbitrum Stylus (Rust/WASM) rollup | Gas semantics, access control, the escrow state machine, and the 80/20 slash split are real and measured; there is no public fee market, no mempool contention, and no finality delay. Whether a fraud proof can be censored under contested block space is unaddressed. |
-| Data availability | A local, namespaced, Merkle-committed append-only blob store implementing the identical binding scheme (domain-separated leaf/node hashing) that the on-chain fraud-proof verifier checks | Celestia, with data-availability sampling over a decentralized validator set | The *binding* property — a provider cannot show a verifier one output and the chain another — is real, tested, and exercised on chain. The *availability* guarantee is absent: a provider that deletes its own blob makes the audit impossible rather than making itself provably guilty. Migration requires reimplementing two functions (`submit_blob`, `get_blob`) against the same interface. |
+| Data availability | A local, namespaced, Merkle-committed append-only blob store implementing the identical binding scheme (domain-separated leaf/node hashing) that the on-chain fraud-proof verifier checks | Celestia, with data-availability sampling over a decentralized validator set | The *binding* property (a provider cannot show a verifier one output and the chain another) is real, tested, and exercised on chain. The *availability* guarantee is absent: a provider that deletes its own blob makes the audit impossible rather than making itself provably guilty. Migration requires reimplementing two functions (`submit_blob`, `get_blob`) against the same interface. |
 | Inference runtime | A CPU-only, single-node streaming model runtime serving one 2-billion-parameter open-weight model | A GPU-accelerated serving stack (e.g. paged-attention batching) across a discrete-GPU hardware tier | All latency, throughput, and cost figures characterize the CPU tier only; nothing here bears on GPU-tier serving economics, which the network's design also targets but this evaluation cannot exercise for lack of the hardware. |
-| Verification judge | A single small (2B-parameter) locally-hosted model, or — in one dedicated experiment — a panel of larger, hosted models reached over a public API | A validator pool of independently-operated, adequately-capable models, ideally locally hostable at the edge tier | The deployable configuration fails on the two adversary-favored fraud strategies measured (§5.4); the configuration that closes the gap uses judges not deployable on the CPU tier this network targets, so no configuration measured here is simultaneously edge-hostable and fully capable. |
+| Verification judge | A single small (2B-parameter) locally-hosted model, or, in one dedicated experiment, a panel of larger, hosted models reached over a public API | A validator pool of independently-operated, adequately-capable models, ideally locally hostable at the edge tier | The deployable configuration fails on the two adversary-favored fraud strategies measured (§5.4); the configuration that closes the gap uses judges not deployable on the CPU tier this network targets, so no configuration measured here is simultaneously edge-hostable and fully capable. |
 | Provider economic stake | Test-denomination collateral on the local development chain, with no real transferable value | Real, market-priced collateral on a production deployment | The staking, unbonding, and slashing *mechanics* are exercised and value-conserving by construction; no conclusion follows about whether any specific stake level or slash share is an adequate deterrent, because no participant in any measured run has anything real to lose. |
 
 Two further, narrower substitutions are worth naming because they affect how specific numbers in
@@ -561,15 +561,15 @@ in Section 5 as a confound rather than a clean measurement (§6.2 elaborates).
 
 ### 4.3 Deployment Topology
 
-Every experiment reported in Section 5 ran on a single physical development host — sixteen
-logical cores, approximately 31 GB of RAM, no hardware accelerator — with one partial exception.
+Every experiment reported in Section 5 ran on a single physical development host (sixteen
+logical cores, approximately 31 GB of RAM, no hardware accelerator) with one partial exception.
 The single-machine auction experiment runs each simulated network node as a separate operating-
 system process communicating over the loopback network interface. A second, later auction
 experiment instead runs each node inside its own Linux container with its own network namespace
 and its own address on a software bridge, which removes the shared loopback interface and makes
 it possible to attach a controllable one-way link delay to each container independently. Neither
 arrangement is a multi-machine deployment: both share one kernel, and the container topology in
-particular has no physical network interface, no switch, and no wide-area path — what it adds is
+particular has no physical network interface, no switch, and no wide-area path. What it adds is
 solely the ability to set and read back a per-link delay, which is what turns "the auction clears"
 into a measurable latency response (§5.3).
 
@@ -587,7 +587,7 @@ an existing environment against them without re-running the full setup.
 Every experiment run writes to its own timestamped, never-overwritten output directory containing
 a full configuration snapshot, the git commit hash and dirty-tree status, hostname, and
 interpreter version, so that any number quoted later can be traced back to the exact code and
-configuration that produced it — this is enforced by a shared run-logging component that every
+configuration that produced it. This is enforced by a shared run-logging component that every
 experiment uses rather than each experiment implementing its own output convention. Every result
 row records the backend and model that actually served it, read back from the client rather than
 assumed from a command-line argument, because the two can differ whenever a name is aliased or a
@@ -595,8 +595,8 @@ request is silently substituted. A component that cannot be reached, or that ret
 unparseable or incomplete result, is required to raise a named exception or record a distinct
 `error` outcome rather than falling back to a default that would look like a genuine measurement;
 this rule is applied uniformly across the inference client, the verification judge, and the
-model-weight resolver. Every dropped case — a discarded warm-up trial, a corrupted item, a
-paraphrase that failed a validity guard — is counted and reasoned in the run's manifest, so that
+model-weight resolver. Every dropped case (a discarded warm-up trial, a corrupted item, a
+paraphrase that failed a validity guard) is counted and reasoned in the run's manifest, so that
 a rate computed from N items is never silently computed from fewer than N.
 
 ---
@@ -631,14 +631,14 @@ fixed 64-token-ceiling prompt (`inference-benchmark-20260902T120811Z`). Warm tim
 had a mean of 609.6 ms, a median of 587.9 ms, and a 95th percentile of 723.6 ms, with a standard
 deviation of 75.7 ms; **all twenty of twenty warm trials completed under one second.** Sustained
 throughput averaged 12.86 tokens/second (s.d. 0.64). Paired against the same prompt, cold
-time-to-first-token averaged 7,963.8 ms versus a paired warm mean of 653.7 ms — a **12.18×**
+time-to-first-token averaged 7,963.8 ms versus a paired warm mean of 653.7 ms, a **12.18×**
 cold-to-warm ratio and a mean penalty of 7,310 ms, with the cold side tightly clustered (s.d.
 237 ms), consistent with a penalty dominated by a fixed cost rather than scheduling noise. The
 runtime's own reported load-time breakdown attributes the great majority of that penalty to
 model loading rather than to generation (mean cold load 7,418 ms vs. mean warm load 568 ms):
 **the cold-start cost is loading, not inference**, which is the direct empirical justification
 for pricing warmth as a near-eligibility condition in the auction score (§3.4) rather than as a
-smoothly tradeable quality dimension — over this latency range, a cold node is not a slower
+smoothly tradeable quality dimension: over this latency range, a cold node is not a slower
 node, it is a node that cannot serve the request in budget at all. A hosted-API baseline was
 configured to be skipped rather than estimated when no comparison endpoint was available in this
 run, per the evaluation protocol's rule that a missing baseline is reported as absent, never
@@ -656,7 +656,7 @@ three, four, and five simulated nodes, zero failures
 (`exp2-auction-convergence-summary-20260902T110609Z`). Broadcast-to-award time was flat at
 2,007–2,008 ms across all three node counts, because it is pinned by the fixed two-second bid
 collection window and is therefore a property of the configured constant, not a scaling
-measurement — reporting it as evidence of scaling would repeat exactly the error the protocol
+measurement; reporting it as evidence of scaling would repeat exactly the error the protocol
 warns against for a warm-only latency figure. The quantities that do carry scaling information
 are the un-pinned bid-arrival times: first-bid latency rose from 16.9 ms (three nodes) to 22.3 ms
 (four) before falling to 21.1 ms (five), and last-bid latency rose monotonically from 21.3 ms to
@@ -666,24 +666,24 @@ the fastest arrival is comparatively insensitive to the number of others. With s
 deviations comparable in size to the differences between conditions, three node counts cannot
 establish a growth law; what can be said is that the whole of bid collection completes one to two
 orders of magnitude below the two-second window at this scale, so the window is not close to
-binding here — whether that remains true at fifty or five hundred nodes is not measured.
+binding here; whether that remains true at fifty or five hundred nodes is not measured.
 
 **Container topology, controllable link latency.** Because every process in the single-machine
 runs shares one loopback interface, there is no per-peer link to attach a delay to, and the
-latency-response measurement below could not have been taken on that topology at all — not
+latency-response measurement below could not have been taken on that topology at all, not
 because it would have been inaccurate, but because the independent variable did not exist.
 Running each node in its own container with its own network-namespace address removes exactly
 that shortcut. At injected one-way per-link delays of 0, 10, 25, and 50 ms
 (`exp2-swarm-containers-20260902T170808Z` and the three `exp2-swarm-netem-*` runs, seven auctions
 total), first-bid arrival rose from 6.0 ms to 44.5, 71.0, and 114.0 ms, and last-bid arrival from
 7.0 ms to 51.0, 73.5, and 117.5 ms. A least-squares fit gives roughly 2.06 ms of added first-bid
-delay per millisecond of injected one-way delay — close to, but consistently above, the reference
+delay per millisecond of injected one-way delay, close to but consistently above the reference
 line for a bare request/response round trip (one crossing each way), which is consistent with a
 mesh in which some bids are relayed through a third peer and some are not; a fixed three-crossing
 model overpredicts the observed values just as clearly as the two-crossing reference
 underpredicts them, so the true behavior sits between the two and no fixed-hop-count model fits
-exactly. This remains one kernel on one machine — no physical interface, no switch, no wide-area
-path, no packet loss, no jitter — and is not described as a network deployment anywhere in this
+exactly. This remains one kernel on one machine (no physical interface, no switch, no wide-area
+path, no packet loss, no jitter) and is not described as a network deployment anywhere in this
 paper; what it establishes is that the mesh's response to a controlled, symmetric, per-link delay
 is close to linear and roughly consistent with the protocol's expected message-forwarding
 pattern, which a shared-loopback topology could not have shown at all.
@@ -700,10 +700,10 @@ pattern, which a shared-loopback topology could not have shown at all.
 
 ### 5.4 Verification Accuracy
 
-**Method.** Twenty TruthfulQA questions were each presented in five conditions — one honest
+**Method.** Twenty TruthfulQA questions were each presented in five conditions: one honest
 answer generated by the actual local inference node, and four independently-corrupted answers
 produced by fixed corruption strategies (entity/number fabrication, semantic negation, swapping
-in a plausible-but-incorrect answer, and substituting an off-topic answer) — for 100 trials: 80
+in a plausible-but-incorrect answer, and substituting an off-topic answer), for 100 trials: 80
 fraudulent, 20 honest (`verification-20260902T121801Z`). Every answer was written to the
 data-availability layer and its inclusion proof checked before any judge call; all 100 passed
 that check, so every result below is a semantic judging outcome, not a data-mismatch fraud proof.
@@ -718,20 +718,20 @@ construction. With the honest condition corrected to use the network's own local
 same judge model, rubric, and threshold produce zero false positives. We flag the generalizable
 lesson: **an LLM-as-a-Judge evaluation's honest control is itself a model output, and a measured
 false-positive rate is confounded with that control's own error rate unless the control is
-independently verified** — a confound that, as later paragraphs of this subsection show, recurs
+independently verified.** This is a confound that, as later paragraphs of this subsection show, recurs
 in milder form even after this correction.
 
 **Recall, and where it collapses.** Overall recall was 65% (52 of 80 caught), but this single
 number conceals a sharply bimodal result by strategy: 100% on off-topic substitution, 95% on
 fabricated entities, versus **35%** on plausible-incorrect substitution and **30%** on negation.
 The mean-score evidence rules out "near-threshold hesitation" as an explanation: the two hard
-strategies scored 3.80 and 4.05 on a 1–5 scale against a pass threshold of 3 — a full point above
+strategies scored 3.80 and 4.05 on a 1–5 scale against a pass threshold of 3, a full point above
 the line, close to the 4.95 mean the same judge gave genuinely honest answers, and the
 score-distribution data shows the missed frauds clustering at the same top-of-scale marks as
 honest answers rather than near the threshold. Raising the pass threshold from 3 to 5, the
 maximum the rubric admits, recovers only 3 of 28 missed frauds while beginning to cost honest
 providers. **The judge catches fraud with a lexical trace and fails on fraud that is
-grammatically ordinary and topically appropriate but false** — detecting the latter requires the
+grammatically ordinary and topically appropriate but false.** Detecting the latter requires the
 judge to actually know the fact, not merely to notice something is off.
 
 
@@ -751,18 +751,18 @@ honest item was dropped as unrecoverable). Two of the four judge configurations 
 data: a ~13×-larger model from the *same* model family as the original judge recovered negation
 recall to **100%** and incorrect-substitution recall to 95% (98% overall, zero errors); a model
 from an *unrelated* family reached 100% and 90% respectively (96% overall, zero errors). This
-directly tests, and refutes, a hypothesis this evaluation initially favored — that a same-family
+directly tests, and refutes, a hypothesis this evaluation initially favored: that a same-family
 judge would inherit the fraud-generating model's own misconceptions and so a larger same-family
 judge would fail similarly. It did not: **holding family constant and raising capability
 eliminated the blind spot completely, and an unrelated-family judge of comparable capability
 closed the same gap**, so capability, not lineage, is the variable that determined the original
 failure. (The other two panel members returned usable data on fewer than 20% of items, exhausted
 by free-tier API rate limits within minutes; their apparent perfect scores are explicitly
-**not** reported as results — see §6.2.)
+**not** reported as results; see §6.2.)
 
 **Quorum.** Under a majority-vote rule across all four panel members (including the two
 mostly-erroring ones), the panel reached 97% recall at a **7%** false-positive rate and 94%
-class-balanced precision — a substantial improvement over either complete member's own
+class-balanced precision, a substantial improvement over either complete member's own
 false-positive rate (26% and 16% individually) at essentially unchanged recall. This is direct
 empirical support for aggregating multiple validators under a quorum rule rather than deploying
 a single judge, though the result is qualified by the same two members' unreliability: many of
@@ -770,7 +770,7 @@ the panel's decisions were effectively taken by two voters rather than four (§6
 self-consistency under paraphrase was separately measured with the original small judge on 8
 questions (30 judgements): the verdict flipped on 25% of answers when the same claim was
 reworded, with individual scores spanning the full 1–5 scale on the same underlying claim in one
-case — evidence that instability is real at this judge capability, though the sample is too
+case, evidence that instability is real at this judge capability, though the sample is too
 small to size it precisely, and it has not been re-measured with a capable judge.
 
 ![Figure 9. Recall by corruption strategy for each individual judge and for each quorum rule, with each configuration's honest false-positive rate carried in the legend.](docs/figures/fig_judge_panel.png)
@@ -792,9 +792,9 @@ with size (6.6 ms at 64 KiB to 317.5 ms at 48 MiB; throughput 9.9–158.5 MB/s),
 On every fetch, the content identifier was recomputed independently from the received bytes
 rather than trusted from the daemon's own claim, and all five artefacts verified. Least-recently-
 used cache eviction was exercised under a budget deliberately smaller than the working set and
-verified to evict exactly the correct entry when forced to choose one. Three tamper cases — a
+verified to evict exactly the correct entry when forced to choose one. Three tamper cases (a
 store serving a substituted artefact, a single bit flipped in a cached file after verification,
-and a corrupted cache reaching the resolver — were each rejected with a named exception (or, for
+and a corrupted cache reaching the resolver) were each rejected with a named exception (or, for
 the in-place bit flip, a boolean re-verification failure), against an honest control accepted
 through the identical code path: **a node can accept model weights from an untrusted peer and
 still know whether it received what it asked for**, without trusting the party that served them.
@@ -808,15 +808,15 @@ client-side retrieval and verification cost, not wide-area transfer.
 Three settlements were driven through a locally-deployed four-contract settlement layer on a
 development chain (`settlement-onchain-20260902T120752Z`): an honest job settled after its
 challenge window elapsed; a job slashed via the trustless data-mismatch fraud proof; and a job
-slashed via a validator's oracle verdict — all three resolved to the correct state, the 80/20
+slashed via a validator's oracle verdict: all three resolved to the correct state, the 80/20
 validator/treasury slash split was exact in both slashed cases, and value conservation held
 across every account checked. Gas per operation ranged from 32,317 (withdrawal) to 221,353 (the
-trustless fraud-proof path — the single most expensive operation measured, and, on this evidence,
+trustless fraud-proof path, the single most expensive operation measured, and, on this evidence,
 the best value in the system: it requires no model and produces certainty rather than a 65%-
 recall probability). Composing the measured clearing price, token count, and amortized
 verification cost (`cost-20260902T123714Z`), the grid model costs **$0.00115** per 1,000
 delivered tokens (of which verification is 4.8%) against a **$0.002** published centralized-API
-list rate — a **0.576×** ratio. We flag this comparison's honesty condition explicitly, as the
+list rate, a **0.576×** ratio. We flag this comparison's honesty condition explicitly, as the
 figures themselves already do: the network's internal unit has no market price, so the dollar
 comparison is a cost *model* at a stated notional conversion rate, not an observed market price;
 the token-denominated and gas-denominated figures are the actual measurements, and only those are
@@ -845,8 +845,8 @@ rational on every measured award, through a real streaming inference call whose 
 clears a sub-second target, through a real content-addressed weight fetch that a node can verify
 without trusting its source, through a real Merkle-committed data-availability check, to a real
 on-chain escrow that resolves correctly down all three of its state-machine paths and conserves
-value exactly. That composition — and not any individual mechanism, all of which are prior art
-(§2) — is what this evaluation is actually able to support at small scale.
+value exactly. That composition, and not any individual mechanism (all of which are prior art,
+§2), is what this evaluation is actually able to support at small scale.
 
 What it does not show is comparably important to state without softening. Every network
 measurement, including the container-topology auction under injected latency, ran on one physical
@@ -855,12 +855,12 @@ loss, or peer churn. Three and five node counts cannot establish a scaling law f
 The settlement layer's gas figures are real but priced against no fee market and no contention.
 The staked collateral in every settlement run is a test value with no real cost to lose, so no
 conclusion follows about whether the specific 80/20 slash split or any given stake level is an
-adequate deterrent against a rational, resourced adversary — the mechanism's incentive-
+adequate deterrent against a rational, resourced adversary. The mechanism's incentive-
 compatibility argument (§3.4, §3.7) is a property of its construction, not something this
 evaluation measures empirically. And, most consequentially for the system's central claim, the
 verification layer as actually deployable on the network's target hardware tier (a small,
 locally-hostable judge) is the configuration measured to fail on exactly the two fraud strategies
--- negation and plausible substitution — that a rational adversary would choose specifically
+, negation and plausible substitution, that a rational adversary would choose specifically
 because they evade detection (§5.4); the configuration that closes that gap uses judges not
 deployable on that same hardware tier. Table 1 (§4.2) already states, component by component, the
 specific limitation each substitution leaves open; none of those limitations is closed by this
@@ -870,14 +870,14 @@ evaluation, and the verification-judge row is the one this section returns to.
 
 The most important qualitative finding of this evaluation is not the size of any single number
 but the *shape* of the verification failure and the correction to an initial, plausible-sounding
-explanation of it. It would have been easy — and the evaluation initially favored this reading --
+explanation of it. It would have been easy, and the evaluation initially favored this reading,
 to conclude that a judge sharing a model family with the fraud-generating model would share its
 blind spots, and that model *diversity* was therefore the fix. The panel experiment (§5.4) tested
 this directly and refutes it: a same-family judge at roughly thirteen times the parameter count
 closed the recall gap completely, and so did an unrelated-family judge of comparable capability.
 **The variable that mattered was capability, not lineage.** We report this as a refuted
 hypothesis rather than quietly dropping it, because a prediction that was tested and found wrong
-is worth more to the next iteration of this work than an untested intuition left standing — and
+is worth more to the next iteration of this work than an untested intuition left standing, and
 because it changes the design's practical recommendation from "diversify judge model families" to
 the narrower and more testable "ensure deployed judges clear a capability threshold for parsing
 negation and plausible-substitution fraud," a threshold this evaluation locates only qualitatively
@@ -886,19 +886,19 @@ negation and plausible-substitution fraud," a threshold this evaluation locates 
 A second, methodologically general finding travels alongside the first and is easy to
 under-weight because it is not about the judge at all: **every false-positive rate reported in
 this evaluation is confounded by the fallibility of whichever model generated the "honest"
-control answers.** This is not a hypothetical concern — roughly half of the false positives
+control answers.** This is not a hypothetical concern: roughly half of the false positives
 recorded against the larger, more capable judges in the panel run were, on inspection, cases
 where the honest generator itself produced a fabricated or mistaken claim that the judge was
 correct to fail. This is the same failure mode, in milder form, that produced an alarming and
 ultimately misdiagnosed 75%-false-positive result in an earlier, superseded run of this same
-verification pipeline (§5.4) — and the fact that a diagnosed failure mode recurred, even after
+verification pipeline (§5.4), and the fact that a diagnosed failure mode recurred, even after
 being named, is itself the strongest available argument for a human-adjudicated honest control
 (§7.2) rather than continuing to generate one.
 
 **Judge self-consistency under paraphrase compounds both findings rather than sitting beside
 them.** A 25% verdict-flip rate under semantically-preserving rewording, measured with the small
 deployed judge, means that even where recall is adequate on average, a single verdict is not a
-stable basis for an irreversible economic action — a provider could be slashed for one phrasing of
+stable basis for an irreversible economic action: a provider could be slashed for one phrasing of
 a correct answer and spared for another, and neither the provider nor the network can determine
 after the fact which verdict was "correct." This sharpens rather than merely adds to the case for
 quorum-based verification (§3.6): a single judge's instability is a second, independent argument
@@ -910,7 +910,7 @@ judge, so whether capability also resolves instability is a genuinely open quest
 Automated, on-chain slashing driven by an LLM's judgment carries a consequence that a purely
 technical accuracy figure understates: a false FAIL verdict is not a misclassification recorded in
 a spreadsheet, it is an irreversible transfer of real economic value away from a participant who
-did nothing wrong. This evaluation's finding that a small judge is confidently — not hesitantly --
+did nothing wrong. This evaluation's finding that a small judge is confidently, not hesitantly,
 wrong on a specific, adversary-favored class of fraud (§5.4) means that the deployment decision of
 *which judge, at what capability, under what quorum rule* is not a performance-tuning parameter to
 be set once and left alone; it is closer to a safety-critical configuration choice that determines
@@ -925,9 +925,9 @@ judge happens to run cheaply on a given operator's hardware.
 ### 7.1 Conclusion
 
 This work asked whether five mechanisms studied separately in the decentralized-systems and
-machine-learning-evaluation literatures — peer-to-peer discovery, an auction-based scheduling
+machine-learning-evaluation literatures (peer-to-peer discovery, an auction-based scheduling
 market, streaming edge inference, sampled semantic and cryptographic output verification, and
-staked on-chain settlement — can be composed into one job pipeline that runs end to end and is
+staked on-chain settlement) can be composed into one job pipeline that runs end to end and is
 measured rather than merely described. The evidence in Section 5 supports that they can: every
 stage of the pipeline corresponds to code that executed against real cryptography, a real
 peer-to-peer network stack, a real streaming inference runtime, a real content-addressed storage
@@ -935,14 +935,14 @@ daemon, and a real smart-contract chain, with every reported figure traceable to
 configuration-snapshotted run directory. The prototype's own most important result, however, is
 not a positive one: the verification layer, in the configuration actually deployable on the
 network's target hardware tier, was measured to fail on exactly the fraud strategies a rational
-adversary would prefer, and the evaluation's own initial explanation for that failure — model
-lineage rather than capability — was tested and found wrong. Reporting that correction plainly,
+adversary would prefer, and the evaluation's own initial explanation for that failure, model
+lineage rather than capability, was tested and found wrong. Reporting that correction plainly,
 rather than either hiding the failure or keeping the wrong explanation, is what makes this
 evaluation useful to whoever builds on it next: it is achievable in a research-scale prototype
 that a small, resource-constrained team can build, measure, and reason honestly about in a short
-timeframe, while production deployment — across real networks, against a real fee market, and
+timeframe, while production deployment, across real networks, against a real fee market, and
 with a verification layer capable enough to be trustworthy on hardware the network can actually
-recruit — remains substantial, specifically enumerated future work.
+recruit, remains substantial, specifically enumerated future work.
 
 ### 7.2 Future Work
 
@@ -953,15 +953,15 @@ aspiration to do more.
    every network measurement in this evaluation, including the container-topology auction, shares
    one kernel. Running nodes on physically distinct hosts across real networks would test the
    discovery layer, the gossip mesh, and the fixed bid window against real wide-area latency, NAT
-   traversal, clock skew, and peer churn — none of which a single-host topology can produce
+   traversal, clock skew, and peer churn, none of which a single-host topology can produce
    regardless of how much delay is injected into it.
 
 2. **A capability-adequate, edge-hostable verification judge.** The central open problem this
    evaluation surfaces (§5.4, §6.2): the judge configuration that closes the recall gap is not
    deployable on the hardware tier the network targets. Locating the actual capability threshold
-   at which negation and plausible-substitution fraud become reliably detectable — by sweeping
+   at which negation and plausible-substitution fraud become reliably detectable, by sweeping
    model size within one family on locally-hostable hardware, rather than comparing families on
-   hosted APIs — is a direct, answerable next experiment, as is repeating it with a full,
+   hosted APIs, is a direct, answerable next experiment, as is repeating it with a full,
    rate-limit-free panel (two of four members in this evaluation's panel run produced no usable
    data at all) and a larger paraphrase self-consistency sample.
 
