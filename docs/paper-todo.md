@@ -2,6 +2,20 @@
 
 *Moved out of `docs/paper.md` so the manuscript itself reads as publication-ready. This file is internal tracking, not part of the paper.*
 
+## Status (2026-11-24)
+
+The IEEE version is typeset in the IEEEtran conference template: source `docs/paper-ieee/main.tex`,
+output `The-Edge-Grid-IEEE-format.pdf` (6 pages). Rebuild with `tectonic docs/paper-ieee/main.tex`
+(or `pdflatex` twice), then move `main.pdf` to the repo root under that name.
+
+Done in this pass: items 9 and 10 below (figures wired in and numbered, including the architecture
+and escrow diagrams Section III refers to; IEEE template applied); section cross-references fixed
+(the draft cited "Section 5.4" etc., which do not exist, now V-A to V-C); TruthfulQA cited where it
+is used; references ordered by first citation; every figure in Section V re-checked against
+`docs/results/` and `docs/report/generated/`. The guide is credited in an Acknowledgment section.
+
+Still open, and they need new experiments rather than editing: items 1, 2, 3 and 5.
+
 ## TODO for the human author
 
 **Missing experiments / data needed before this draft is submission-ready:**
@@ -42,10 +56,10 @@
    should re-check that every in-text citation number in Section 2 actually matches the claim it
    is attached to, since this draft assembled the citations from the reference list's stated
    subject matter rather than by re-reading each source.
-9. **Figures are referenced by placeholder** (`\ref{fig:architecture}`, `\ref{fig:sequence}`, and
+9. **[DONE 2026-11-24]** **Figures are referenced by placeholder** (`\ref{fig:architecture}`, `\ref{fig:sequence}`, and
    the named `docs/figures/fig_*.png` files) but have not been re-typeset or captioned for this
    paper's specific figure numbering; `docs/figures/` already contains rendered PNGs for every
    experiment referenced in Section 5 and should be wired in directly.
-10. **Venue formatting** (page/word limits, citation style, anonymization if required) has not
+10. **[DONE 2026-11-24, IEEEtran conference; page limits of a specific venue still to check]** **Venue formatting** (page/word limits, citation style, anonymization if required) has not
     been applied — this draft is content-complete but not typeset to any specific venue's
     template.

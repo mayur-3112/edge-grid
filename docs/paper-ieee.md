@@ -1,3 +1,5 @@
+<!-- Typeset version: docs/paper-ieee/main.tex (IEEEtran) -> The-Edge-Grid-IEEE-format.pdf -->
+
 # The Edge Grid: A Prototype for Decentralized, Verifiable Peer-to-Peer AI Inference
 
 <div class="ieee-authors">
@@ -30,7 +32,7 @@ than verifying storage: a wrong answer need not look wrong (a fabricated fact or
 be fluent and indistinguishable from a correct one), and the party best positioned to catch a
 subtle semantic error is itself a language model, so the verification layer inherits every
 reliability question that attaches to language models generally, including that it can be
-confidently wrong. Section 5.4 is a direct measurement of that risk.
+confidently wrong. Section V-C is a direct measurement of that risk.
 
 We design the network around a strict separation between two kinds of verification claim.
 A **cryptographic fraud proof** establishes with certainty that a provider served output
@@ -75,13 +77,13 @@ verification layer outside Morpheus's stated scope. DGrid [7] and Parallax [8] d
 decentralized inference serving without the auction or verification layers evaluated here; both
 are vendor litepaper/preprint, not peer-reviewed. **PolyLink** [9] is the closest refereed
 academic parallel for settlement but does not evaluate an auction's response to injected latency
-(§5.3).
+(Section V-B).
 
 Our data-availability layer implements Celestia's *binding* property [10] against a local store,
 explicitly declining its *availability* guarantee. Settlement's challenge-window structure follows
 the fraud-proof lineage established for rollups [11, 10, 12]. The LLM-as-a-Judge paradigm [13, 14, 15]
 underlies our semantic tier; our contribution is a measured finding that judge *capability*, not
-*lineage* relative to the policed model, determines whether subtle falsehoods are caught (§5.4),
+*lineage* relative to the policed model, determines whether subtle falsehoods are caught (Section V-C),
 qualifying the intuition that same-family judges share blind spots. Petals [16, 17] addresses
 collaborative multi-peer inference, a complementary problem; Navigator [18] addresses decentralized
 *scheduling* alone, without verification or settlement.
@@ -122,7 +124,7 @@ truthful bidding dominant. Eligibility (tier, latency, price ceiling) is checked
 constraints before any price comparison. A warm-model discount is applied to *ranking score* only,
 never to payment, preserving individual rationality, because over realistic latency budgets, a
 cold provider's fixed load cost makes warmth closer to an eligibility condition than a tradeable
-quality dimension (confirmed empirically in §5.2).
+quality dimension (confirmed empirically in Section V-A).
 
 **Inference contract.** A narrow, runtime-agnostic contract: stream tokens, report true
 time-to-first-token and a real per-request token count, and report cold/warm state. A provider
@@ -138,7 +140,7 @@ a first-class property rather than assumed.
 
 **Settlement.** A fixed challenge window follows commitment; uncontested release requires no
 privileged party online. Confirmed fraud (proof or FAIL verdict) returns escrow to the requester
-and slashes provider collateral 80/20 between reporter and treasury (Figure 3). Withdrawn
+and slashes provider collateral 80/20 between reporter and treasury (Figure 2). Withdrawn
 collateral stays slashable during an unbonding delay, closing a front-running window.
 
 ---
@@ -180,9 +182,9 @@ attributable almost entirely to model *load* time (7,418 ms cold vs. 568 ms warm
 the direct empirical justification for pricing warmth near eligibility rather than as a smooth
 quality signal.
 
-![Figure 1. Time to first token, warm versus cold start.](docs/figures/fig_ttft.png)
+![Figure 3. Time to first token, warm versus cold start.](docs/figures/fig_ttft.png)
 
-*Figure 1. Time to first token, warm versus cold start, on a logarithmic time axis.*
+*Figure 3. Time to first token, warm versus cold start, on a logarithmic time axis.*
 
 ### B. Auction Convergence
 
@@ -196,7 +198,7 @@ messages.
 
 ### C. Verification Accuracy
 
-100 trials (80 fraudulent across four corruption strategies, 20 honest) against TruthfulQA. The
+100 trials (80 fraudulent across four corruption strategies, 20 honest) against TruthfulQA [14]. The
 judge failed **none** of 20 honest answers (100% precision, 0% FPR), a corrected result: an
 earlier run had shown a 75% false-positive rate, since diagnosed as a fault in the honest-answer
 *generator*, not the judge. **Overall recall was 65%, sharply bimodal**: 100%/95% on
@@ -204,22 +206,22 @@ off-topic/fabricated-entity fraud, versus **35%/30%** on plausible-substitution/
 scored *confidently* (3.80–4.05/5 against a threshold of 3), not near-threshold, ruling out
 "raise the threshold" as a fix.
 
-![Figure 2. Fraud detection by corruption strategy.](docs/figures/fig_verification.png)
+![Figure 4. Fraud detection by corruption strategy.](docs/figures/fig_verification.png)
 
-*Figure 2. Fraud detection by corruption strategy: precision, recall, and F1.*
+*Figure 4. Fraud detection by corruption strategy: precision, recall, and F1.*
 
 **Capability, not lineage.** Re-judging the same 80 strings with larger hosted models: a
 ~13×-larger *same-family* judge recovered negation recall to 100% (98% overall); an *unrelated*
 family reached 100%/90% (96% overall), refuting our own initial hypothesis that lineage, not
 capability, explained the gap. Under majority-vote quorum across all four panel members, recall
 reached 97% at a **7%** false-positive rate versus 26%/16% for individual complete members,
-direct support for quorum aggregation, qualified by two of four members being rate-limited into
-near-uselessness. Judge self-consistency under paraphrase (small judge, 8 questions): a **25%**
+direct support for quorum aggregation, qualified by two of four members being rate-limited by
+free-tier APIs into usable verdicts on fewer than 20% of items. Judge self-consistency under paraphrase (small judge, 8 questions): a **25%**
 verdict-flip rate on reworded claims.
 
-![Figure 3. Judge panel recall by strategy and quorum rule.](docs/figures/fig_judge_panel.png)
+![Figure 5. Judge panel recall by strategy and quorum rule.](docs/figures/fig_judge_panel.png)
 
-*Figure 3. Recall by corruption strategy for each judge and quorum rule.*
+*Figure 5. Recall by corruption strategy for each judge and quorum rule.*
 
 ### D. Weight Distribution and Cost
 
@@ -244,7 +246,7 @@ rational on every measured award, through a real streaming inference call whose 
 clears a sub-second target, through a real content-addressed weight fetch a node can verify without
 trusting its source, through a real Merkle-committed data-availability check, to a real on-chain
 escrow that resolves correctly down all three of its state-machine paths and conserves value
-exactly. That composition, not any individual mechanism (all of which are prior art, §II), is
+exactly. That composition, not any individual mechanism (all of which are prior art, Section II), is
 what this evaluation is actually able to support at small scale. What it does not show is
 comparably important: every network measurement, including the auction under injected latency, ran
 on one physical kernel; nothing here establishes behavior across real wide-area links, NAT
